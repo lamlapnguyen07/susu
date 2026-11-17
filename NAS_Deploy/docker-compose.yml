@@ -1,0 +1,67 @@
+# ============================================================
+#  食在好蔬 — Synology NAS 部署（Caddy 反向代理 + 兩個服務）
+#  caddy        = 對外入口 (80/443)，依路徑分流到 app / push_server
+#  app          = 網站 + 後台 + API（app.py，產生取貨 QR 圖）
+#  push_server  = LINE 通知 / Webhook（push_sever.py，提供 QR 圖給 LINE 抓）
+#
+#  ★ app 與 push_server 都把同一個 ./data 掛進 /app/data：
+#    取貨 QR 圖（data/訂單/）由 app 產生、由 push_server 對外提供 → 不會「圖源找不到」。
+#  ★ 服務名 app / push_server 要跟 Caddyfile 裡的 reverse_proxy 目標一致。
+# ============================================================
+
+services:
+  app:
+    build: ./app
+    container_name: goodveg-app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      TZ: Asia/Taipei
+      # 持久化路徑一律指到掛載進來的 /app/data
+      ORDER_QR_DIR: /app/data/訂單
+      PRODUCT_IMG_DIR: /app/data/product-images
+      AUDIT_LOG_PATH: /app/data/audit.log
+    # 只 expose 給內部網路（Caddy 用服務名 app:5000 直連），不對主機開埠 → 不會撞 port
+    expose:
+      - "5000"
+    volumes:
+      - ./data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # DB 連不到區網 IP 時的後備
+
+  push_server:
+    build: ./push_server
+    container_name: goodveg-push
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      TZ: Asia/Taipei
+      # ★ 必須跟 app 指到「同一個」資料夾，才讀得到 app 產生的 QR 圖
+      ORDER_QR_DIR: /app/data/訂單
+    # 同樣只 expose 給內部網路（Caddy 用 push_server:4999 直連）
+    expose:
+      - "4999"
+    volumes:
+      - ./data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: goodveg-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # HTTP/3
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data        # 憑證放這（要持久化，否則每次重啟重抓證書）
+      - caddy_config:/config
+    depends_on:
+      - app
+      - push_server
+
+volumes:
+  caddy_data:
+  caddy_config:

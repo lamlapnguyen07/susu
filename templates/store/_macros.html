@@ -1,0 +1,98 @@
+{# 商品卡、加入購物車控制、標籤 #}
+
+{% macro photo(src, alt, cls='', eager=False, sizes='') -%}
+  {%- if src -%}
+  <img src="{{ src }}" alt="{{ alt }}" class="{{ cls }}" {% if not eager %}loading="lazy"{% endif %} decoding="async">
+  {%- else -%}
+  <span class="ph {{ cls }}" role="img" aria-label="{{ alt }}（照片準備中）"><span>{{ alt[:1] }}</span></span>
+  {%- endif -%}
+{%- endmacro %}
+
+{# 合作農場的封面：有 LOGO 就用 LOGO（置中，四周用 LOGO 自己的顏色模糊填滿，不會裁到字） #}
+{% macro farm_cover(f, eager=False) -%}
+  {%- if f.logo -%}
+  <span class="logo-cover" style="--logo:url('{{ f.logo }}')"><img src="{{ f.logo }}" alt="{{ f.name }} 標誌" {% if not eager %}loading="lazy"{% endif %}></span>
+  {%- else -%}
+  {{ photo(f.photos[0] if f.photos else '', f.name, eager=eager) }}
+  {%- endif -%}
+{%- endmacro %}
+
+{% macro stock_tag(p, labels) -%}
+  {%- if not p.is_available -%}<span class="tag tag-out">暫無供應</span>
+  {%- elif p.stock_status == 'low' -%}<span class="tag tag-low">剩少量</span>
+  {%- elif p.stock_status == 'next' -%}<span class="tag tag-next">下週採收</span>
+  {%- endif -%}{# 有貨是常態，不另外標示，只標例外狀態 #}
+{%- endmacro %}
+
+{% macro source_chip(p, farm_by_id) -%}
+  {%- if p.kind == 'farm' -%}
+    {%- set f = farm_by_id.get(p.farm_id) -%}
+    <a class="chip chip-farm" href="/farms/{{ p.farm_id }}">{% if f and f.logo_mark %}<img src="{{ f.logo_mark }}" alt="" width="16" height="16">{% endif %}{{ f.name if f else '合作農場' }}{% if f and f.region %}・{{ f.region }}{% endif %}</a>
+  {%- else -%}
+    <span class="chip chip-own"><img src="/img/LOGO.png" alt="" width="14" height="14">食在好蔬・北投</span>
+  {%- endif -%}
+{%- endmacro %}
+
+{# 加入購物車：伺服器先給一顆按鈕，JS 會依購物車狀態換成「− n ＋」 #}
+{% macro add_control(p, size='') -%}
+  {%- if p.kind == 'standard' -%}
+    {%- set key = 'pack:' ~ p.name -%}
+  {%- else -%}
+    {%- set key = 'item:' ~ p.id -%}
+  {%- endif -%}
+  <div class="add {{ size }}" data-cart-key="{{ key }}" data-label="{{ p.name }}">
+    {%- if p.is_available -%}
+    <button type="button" class="add-btn" data-add aria-label="把{{ p.name }}加入購物車">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>加入</span>
+    </button>
+    {%- else -%}
+    <span class="add-off">暫無供應</span>
+    {%- endif -%}
+  </div>
+{%- endmacro %}
+
+{% macro product_card(p, farm_by_id, pick_price, idx=0) -%}
+  {%- set price = pick_price if p.kind == 'standard' else p.price -%}
+  {%- set unit = '包' if p.kind == 'standard' else p.unit -%}
+  <article class="pcard{% if not p.is_available %} is-out{% endif %}"
+           data-src="{{ 'farm-' ~ p.farm_id if p.kind == 'farm' else 'own' }}"
+           data-type="{{ p.kind }}" data-price="{{ price }}" data-order="{{ idx }}"
+           data-search="{{ (p.name ~ ' ' ~ p.name_en ~ ' ' ~ p.category ~ ' ' ~ (farm_by_id.get(p.farm_id).name if p.kind == 'farm' and farm_by_id.get(p.farm_id) else '食在好蔬')) | lower }}">
+    <a class="pcard-pic" href="/p/{{ p.id }}" tabindex="-1" aria-hidden="true">
+      {{ photo(p.photos[0] if p.photos else '', p.name) }}
+      {%- if p.photos | length > 1 %}{{ photo(p.photos[1], '', 'alt-photo') }}{% endif %}
+    </a>
+    <div class="pcard-body">
+      <div class="pcard-meta">{{ source_chip(p, farm_by_id) }}{{ stock_tag(p, None) }}</div>
+      <h3 class="pcard-title"><a href="/p/{{ p.id }}">{{ p.name }}</a></h3>
+      {% if p.description %}<p class="pcard-desc">{{ p.description }}</p>{% endif %}
+      <div class="pcard-foot">
+        <p class="price">NT${{ price }}<span>/ {{ unit }}</span></p>
+        {{ add_control(p) }}
+      </div>
+    </div>
+  </article>
+{%- endmacro %}
+
+{% macro combo_card(combo_price, idx=0) -%}
+  <article class="pcard pcard-feature" data-src="own" data-type="standard" data-price="{{ combo_price }}" data-order="{{ idx }}"
+           data-search="農場搭配包 萵苣 組合包 隨機 食在好蔬">
+    <a class="pcard-pic" href="/pack" tabindex="-1" aria-hidden="true">
+      <img src="/img/menu/frilly-2.jpg" alt="" loading="lazy">
+      <span class="ribbon">最划算</span>
+    </a>
+    <div class="pcard-body">
+      <div class="pcard-meta"><span class="chip chip-own"><img src="/img/LOGO.png" alt="" width="14" height="14">食在好蔬・北投</span></div>
+      <h3 class="pcard-title"><a href="/pack">農場搭配萵苣包</a></h3>
+      <p class="pcard-desc">農場依當天採收混搭不同萵苣，每包約 400 公克。不想自己挑的首選。</p>
+      <div class="pcard-foot">
+        <p class="price">NT${{ combo_price }}<span>/ 包</span></p>
+        <div class="add" data-cart-key="pack:__combo__" data-label="農場搭配包">
+          <button type="button" class="add-btn" data-add aria-label="把農場搭配包加入購物車">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>加入</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </article>
+{%- endmacro %}

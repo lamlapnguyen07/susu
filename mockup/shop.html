@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>市集｜無農藥水耕萵苣與合作農場商品｜食在好蔬</title>
+<meta name="description" content="一次買齊北投魚菜共生萵苣，以及合作農場的稻米、雞蛋、草莓果醬。萵苣採收當天出貨。">
+<link rel="canonical" href="https://www.eatgoodveg.com/shop">
+<link rel="icon" href="../img/LOGO.png">
+<link rel="stylesheet" href="mock.css">
+</head>
+<body data-page="shop">
+
+<main>
+  <section class="page-head">
+    <div class="page-head-text">
+      <nav class="crumbs" aria-label="麵包屑"><ol><li><a href="index.html">首頁</a></li><li>市集</li></ol></nav>
+      <h1>市集</h1>
+      <p>北投農場的萵苣按包賣，合作農場的商品單件買，全部放進同一台購物車、一次結帳。<span class="tbd">合作農場商品與價格為示意</span></p>
+    </div>
+    <div class="page-head-photo" style="background-image:url('../img/site/site-5.jpg')" role="img" aria-label="北投農場"></div>
+  </section>
+
+  <div class="wrap shop">
+    <aside class="filters" aria-label="篩選">
+      <fieldset>
+        <h2>來源</h2>
+        <label><input type="checkbox" name="src" value="own" checked> 食在好蔬 <span class="n">6</span></label>
+        <label><input type="checkbox" name="src" value="farm" checked> 合作農場 <span class="n">5</span></label>
+      </fieldset>
+      <fieldset>
+        <h2>種類</h2>
+        <label><input type="checkbox" name="cat" value="veg" checked> 萵苣與葉菜 <span class="n">6</span></label>
+        <label><input type="checkbox" name="cat" value="grain" checked> 米與雜糧 <span class="n">1</span></label>
+        <label><input type="checkbox" name="cat" value="egg" checked> 雞蛋 <span class="n">1</span></label>
+        <label><input type="checkbox" name="cat" value="fruit" checked> 水果與果醬 <span class="n">2</span></label>
+        <label><input type="checkbox" name="cat" value="tea" checked> 茶 <span class="n">1</span></label>
+      </fieldset>
+    </aside>
+
+    <section aria-label="商品">
+      <div class="chips" role="group" aria-label="快速篩選">
+        <button type="button" data-chip="all" aria-pressed="true">全部</button>
+        <button type="button" data-chip="own" aria-pressed="false">食在好蔬</button>
+        <button type="button" data-chip="farm" aria-pressed="false">合作農場</button>
+        <button type="button" data-chip="veg" aria-pressed="false">萵苣與葉菜</button>
+        <button type="button" data-chip="fruit" aria-pressed="false">水果與果醬</button>
+      </div>
+      <div class="shop-bar">
+        <span id="shown">共 11 件商品</span>
+        <label>排序 <select><option>這週推薦</option><option>價格低到高</option><option>最新上架</option></select></label>
+      </div>
+      <ul class="grid" id="grid">
+        <li class="card" data-src="own" data-cat="veg">
+          <a class="pic" href="product.html"><img src="../img/menu/frilly-2.jpg" alt="農場搭配萵苣包"></a>
+          <p class="src own">食在好蔬・北投</p>
+          <h3><a href="product.html">農場搭配萵苣包</a></h3>
+          <div class="row"><span class="price">NT$200 <span class="unit">/ 包</span></span><button class="add" type="button" data-add="農場搭配萵苣包" data-price="200" data-src="食在好蔬・北投">加入購物車</button></div>
+        </li>
+        <li class="card" data-src="own" data-cat="veg">
+          <a class="pic" href="product.html"><img src="../img/menu/red-oak-1.jpg" alt="紅橡木萵苣"></a>
+          <p class="src own">食在好蔬・北投</p>
+          <h3><a href="product.html">紅橡木萵苣</a></h3>
+          <div class="row"><span class="price">NT$250 <span class="unit">/ 自選包</span></span><button class="add" type="button" data-add="自選包（紅橡木萵苣）" data-price="250" data-src="食在好蔬・北投">加入購物車</button></div>
+        </li>
+        <li class="card" data-src="own" data-cat="veg">
+          <a class="pic" href="product.html"><img src="../img/menu/sweet-romaine-1.jpg" alt="甜蘿蔓萵苣"></a>
+          <p class="src own">食在好蔬・北投</p>
+          <h3><a href="product.html">甜蘿蔓萵苣</a></h3>
+          <div class="row"><span class="price">NT$250 <span class="unit">/ 自選包</span></span><button class="add" type="button" data-add="自選包（甜蘿蔓）" data-price="250" data-src="食在好蔬・北投">加入購物車</button></div>
+        </li>
+        <li class="card" data-src="farm" data-cat="grain">
+          <a class="pic" href="farm.html"><div class="ph">商品照片待提供</div></a>
+          <p class="src">合作農場 A・花蓮富里</p>
+          <h3><a href="farm.html">富里無毒白米 2 公斤</a></h3>
+          <div class="row"><span class="price">NT$380 <span class="unit">/ 包</span></span><button class="add" type="button" data-add="富里無毒白米 2 公斤" data-price="380" data-src="合作農場 A・花蓮富里">加入購物車</button></div>
+        </li>
+        <li class="card" data-src="own" data-cat="veg">
+          <a class="pic" href="product.html"><img src="../img/menu/kale-2.jpg" alt="羽衣甘藍"></a>
+          <p class="src own">食在好蔬・北投</p>
+          <h3><a href="product.html">羽衣甘藍</a></h3>
+          <div class="row"><span class="price">NT$150 <span class="unit">/ 加購</span></span><button class="add" type="button" data-add="羽衣甘藍" data-price="150" data-src="食在好蔬・北投">加入購物車</button></div>
+        </li>
+        <li class="card" data-src="farm" data-cat="egg">
+          <a class="pic" href="farm.html"><div class="ph">商品照片待提供</div></a>
+          <p class="src">合作農場 C・彰化芳苑</p>
+          <h3><a href="farm.html">平飼雞蛋 10 顆</a></h3>
+          <div class="row"><span class="price">NT$160 <span class="unit">/ 盒</span></span><button class="add" type="button" data-add="平飼雞蛋 10 顆" data-price="160" data-src="合作農場 C・彰化芳苑">加入購物車</button></div>
+        </li>
+        <li class="card" data-src="own" data-cat="veg">
+          <a class="pic" href="product.html"><img src="../img/menu/arugula-2.jpg" alt="芝麻葉"></a>
+          <p class="src own">食在好蔬・北投</p>
+          <h3><a href="product.html">芝麻葉</a></h3>
+          <div class="row"><span class="price">NT$150 <span class="unit">/ 加購</span></span><button class="add" type="button" data-add="芝麻葉" data-price="150" data-src="食在好蔬・北投">加入購物車</button></div>
+        </li>
+        <li class="card" data-src="farm" data-cat="fruit">
+          <a class="pic" href="farm.html"><div class="ph">商品照片待提供</div></a>
+          <p class="src">合作農場 B・苗栗大湖</p>
+          <h3><a href="farm.html">冬季草莓 1 盒</a></h3>
+          <div class="row"><span class="price">NT$420 <span class="unit">/ 盒</span></span><button class="add" type="button" data-add="冬季草莓 1 盒" data-price="420" data-src="合作農場 B・苗栗大湖">加入購物車</button></div>
+        </li>
+        <li class="card" data-src="farm" data-cat="fruit">
+          <a class="pic" href="farm.html"><div class="ph">商品照片待提供</div></a>
+          <p class="src">合作農場 B・苗栗大湖</p>
+          <h3><a href="farm.html">少糖草莓果醬</a></h3>
+          <div class="row"><span class="price">NT$280 <span class="unit">/ 罐</span></span><button class="add" type="button" data-add="少糖草莓果醬" data-price="280" data-src="合作農場 B・苗栗大湖">加入購物車</button></div>
+        </li>
+        <li class="card" data-src="own" data-cat="veg">
+          <a class="pic" href="product.html"><img src="../img/menu/green-butter-2.jpg" alt="綠奶油萵苣"></a>
+          <p class="src own">食在好蔬・北投</p>
+          <h3><a href="product.html">綠奶油萵苣</a></h3>
+          <div class="row"><span class="price">NT$250 <span class="unit">/ 自選包</span></span><button class="add" type="button" data-add="自選包（綠奶油萵苣）" data-price="250" data-src="食在好蔬・北投">加入購物車</button></div>
+        </li>
+        <li class="card" data-src="farm" data-cat="tea">
+          <a class="pic" href="farm.html"><div class="ph">商品照片待提供</div></a>
+          <p class="src">合作農場 D・南投鹿谷</p>
+          <h3><a href="farm.html">烏龍茶葉 150 克</a></h3>
+          <div class="row"><span class="price">NT$450 <span class="unit">/ 包</span></span><button class="add" type="button" data-add="烏龍茶葉 150 克" data-price="450" data-src="合作農場 D・南投鹿谷">加入購物車</button></div>
+        </li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<script src="mock.js"></script>
+<script>
+  // 篩選（示意）：桌機用勾選框，手機用橫向按鈕
+  const cards = [...document.querySelectorAll('#grid .card')];
+  const shown = document.getElementById('shown');
+  function applyBoxes() {
+    const src = [...document.querySelectorAll('input[name=src]:checked')].map(i => i.value);
+    const cat = [...document.querySelectorAll('input[name=cat]:checked')].map(i => i.value);
+    let n = 0;
+    cards.forEach(c => { const ok = src.includes(c.dataset.src) && cat.includes(c.dataset.cat); c.hidden = !ok; n += ok; });
+    shown.textContent = n ? `共 ${n} 件商品` : '沒有符合的商品，請多勾選幾個條件。';
+  }
+  document.querySelectorAll('.filters input').forEach(i => i.addEventListener('change', applyBoxes));
+  function applyChip(k) {
+    document.querySelectorAll('.chips button').forEach(b => b.setAttribute('aria-pressed', b.dataset.chip === k));
+    let n = 0;
+    cards.forEach(c => { const ok = k === 'all' || c.dataset.src === k || c.dataset.cat === k; c.hidden = !ok; n += ok; });
+    shown.textContent = `共 ${n} 件商品`;
+  }
+  document.querySelectorAll('.chips button').forEach(b => b.addEventListener('click', () => applyChip(b.dataset.chip)));
+  // 支援 ?src=own / ?src=farm（「我們的好蔬」改到 veggies.html，這裡仍可用來篩選）
+  const q = new URLSearchParams(location.search).get('src');
+  if (q === 'own' || q === 'farm') {
+    document.querySelectorAll('input[name=src]').forEach(i => i.checked = i.value === q);
+    applyBoxes(); applyChip(q);
+  }
+</script>
+</body>
+</html>

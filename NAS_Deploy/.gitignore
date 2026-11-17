@@ -1,0 +1,14 @@
+# 密鑰 — 絕不入版控
+.env
+
+# 執行期產生的資料（QR 圖、商品上傳圖、log）
+data/訂單/*
+!data/訂單/.gitkeep
+data/product-images/*
+!data/product-images/.gitkeep
+data/audit.log
+*.log
+
+# Python
+__pycache__/
+*.pyc

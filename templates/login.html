@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登入 · 食在好蔬</title>
+<link rel="icon" href="/img/LOGO.png">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body class="login-body">
+
+<div class="login-wrap">
+
+  <div class="login-card">
+
+    <div class="login-brand">
+      <img src="/img/LOGO.png" alt="食在好蔬" class="login-logo">
+      <div class="login-brand-text">
+        <div class="login-brand-name">食在好蔬</div>
+        <div class="login-brand-en">Good Veggie · Backstage</div>
+      </div>
+    </div>
+
+    <div class="login-hr"></div>
+
+    <div class="login-eyebrow">Backstage Access</div>
+    <h1 class="login-title">後台登入</h1>
+    <p class="login-sub">Please sign in to continue.</p>
+
+    <form id="login-form" autocomplete="off" class="login-form">
+
+      <!-- 第一步：帳號 / 密碼 -->
+      <div id="step-credentials">
+        <div class="login-field">
+          <label for="username">帳號 · Username</label>
+          <input type="text" id="username" name="username" autocomplete="username" required autofocus>
+        </div>
+
+        <div class="login-field">
+          <label for="password">密碼 · Password</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" id="submit-btn" class="login-btn">
+          <span class="login-btn-label">登入後台</span>
+          <span class="login-btn-arrow">→</span>
+        </button>
+      </div>
+
+      <!-- 第二步：6 位驗證碼（帳密過關後才出現）-->
+      <div id="step-2fa" hidden>
+        <div class="login-field">
+          <label for="totp-code">驗證碼 · 6 位數</label>
+          <input type="text" id="totp-code" inputmode="numeric" autocomplete="one-time-code"
+                 pattern="[0-9]*" maxlength="6" placeholder="000000" class="login-totp-input">
+          <p class="login-2fa-hint">請輸入手機 Google Authenticator 顯示的 6 位數</p>
+        </div>
+
+        <button type="submit" id="verify-btn" class="login-btn">
+          <span class="login-btn-label">驗證並登入</span>
+          <span class="login-btn-arrow">→</span>
+        </button>
+        <button type="button" id="back-btn" class="login-back">← 返回重新輸入帳密</button>
+      </div>
+
+      <div class="login-error" id="error-msg"></div>
+    </form>
+
+    <div class="login-foot">
+      <span>© Good Veggie. All rights reserved.</span>
+      <span class="login-foot-quote">「一葉一葉，皆有來歷。」</span>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const form = document.getElementById('login-form');
+const errMsg = document.getElementById('error-msg');
+const stepCred = document.getElementById('step-credentials');
+const step2fa = document.getElementById('step-2fa');
+const submitBtn = document.getElementById('submit-btn');
+const verifyBtn = document.getElementById('verify-btn');
+const totpInput = document.getElementById('totp-code');
+let step = 'cred';   // 'cred' | '2fa'
+
+function showError(msg) { errMsg.textContent = msg; errMsg.classList.add('show'); }
+function clearError() { errMsg.classList.remove('show'); }
+
+function gotoCred() {
+  step = 'cred';
+  step2fa.hidden = true; stepCred.hidden = false;
+  document.getElementById('password').value = '';
+  clearError();
+}
+function goto2fa() {
+  step = '2fa';
+  stepCred.hidden = true; step2fa.hidden = false;
+  totpInput.value = ''; clearError();
+  setTimeout(() => totpInput.focus(), 50);
+}
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  clearError();
+  if (step === 'cred') doCredentials();
+  else doVerify();
+});
+
+async function doCredentials() {
+  const lbl = submitBtn.querySelector('.login-btn-label');
+  submitBtn.disabled = true; lbl.textContent = '驗證中…';
+  try {
+    const r = await fetch('/api/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value,
+      }),
+      credentials: 'same-origin'
+    });
+    const j = await r.json();
+    if (j.ok && j.need_2fa) { goto2fa(); }
+    else if (j.ok) { lbl.textContent = '進入後台'; setTimeout(() => { location.href = '{{ url_for('admin_page') }}'; }, 200); return; }
+    else { showError(j.error || '登入失敗'); }
+  } catch (err) { showError('網路錯誤，請稍後重試'); }
+  submitBtn.disabled = false; lbl.textContent = '登入後台';
+}
+
+async function doVerify() {
+  const lbl = verifyBtn.querySelector('.login-btn-label');
+  const code = (totpInput.value || '').trim();
+  if (!/^[0-9]{6}$/.test(code)) { showError('請輸入 6 位數字'); return; }
+  verifyBtn.disabled = true; lbl.textContent = '驗證中…';
+  try {
+    const r = await fetch('/api/login/2fa', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ code }),
+      credentials: 'same-origin'
+    });
+    const j = await r.json();
+    if (j.ok) { lbl.textContent = '進入後台'; setTimeout(() => { location.href = '{{ url_for('admin_page') }}'; }, 200); return; }
+    verifyBtn.disabled = false; lbl.textContent = '驗證並登入';
+    if (j.restart) { showError(j.error || '請重新登入'); gotoCred(); return; }
+    showError(j.error || '驗證失敗');
+  } catch (err) {
+    verifyBtn.disabled = false; lbl.textContent = '驗證並登入';
+    showError('網路錯誤，請稍後重試');
+  }
+}
+
+document.getElementById('back-btn').addEventListener('click', gotoCred);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+# 主網站 — 代理到 app (port 5000)
+eatgoodveg.com, www.eatgoodveg.com {
+
+    # LINE Webhook callback 轉給 push_server
+    handle /botgoodveg/callback {
+        reverse_proxy push_server:4999
+    }
+
+    # 訂單 QR 圖片轉給 push_server
+    handle /order-qr/* {
+        reverse_proxy push_server:4999
+    }
+
+    # 其餘全部轉給主 app
+    handle {
+        reverse_proxy app:5000
+    }
+}

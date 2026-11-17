@@ -1,0 +1,53 @@
+{% extends 'store/base.html' %}
+{% from 'store/_macros.html' import product_card %}
+{% block title %}農場搭配萵苣包 NT${{ combo_price }}｜食在好蔬{% endblock %}
+{% block description %}農場依當天採收混搭不同品種的萵苣，每包約 400 公克，NT${{ combo_price }}。{% endblock %}
+{% block main %}
+<div class="wrap">
+  <nav class="crumbs" aria-label="麵包屑"><ol><li><a href="/">首頁</a></li><li><a href="/shop?src=own">北投自家</a></li><li aria-current="page">農場搭配萵苣包</li></ol></nav>
+  <div class="pdp">
+    <div class="gallery-main" data-gallery>
+      <div class="gallery-stage"><img class="main-img" src="/img/menu/frilly-2.jpg" alt="農場搭配萵苣包"></div>
+      <div class="thumbs" role="group" aria-label="切換照片">
+        {% for ph in ['/img/menu/frilly-2.jpg', '/img/menu/red-oak-2.jpg', '/img/menu/green-butter-2.jpg', '/img/menu/romaine-2.jpg'] %}
+        <button type="button" data-img="{{ ph }}" aria-pressed="{{ 'true' if loop.first else 'false' }}" aria-label="第 {{ loop.index }} 張照片"><img src="{{ ph }}" alt=""></button>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="buybox">
+      <div class="pcard-meta"><span class="chip chip-own"><img src="/img/LOGO.png" alt="" width="14" height="14">食在好蔬・北投</span></div>
+      <h1>農場搭配萵苣包</h1>
+      <p class="en">Farm Mix Lettuce Pack</p>
+      <p class="buy-desc">農場依當天採收的萵苣混搭不同品種，顏色和口感比單一品種更豐富。適合每週吃沙拉、想多嘗試不同萵苣的人。</p>
+      <p class="buy-price">NT${{ combo_price }}<span>/ 包</span></p>
+      <p class="buy-note">每包約 400 公克，品種由農場搭配。想指定品種，<a href="/shop?src=own&amp;type=standard">從單一品種挑</a>（NT${{ pick_price }} / 包）。</p>
+      <div class="buy-row" id="buy-row">
+        <div class="qty" data-qty>
+          <button type="button" data-step="-1" aria-label="減少數量">−</button>
+          <input type="text" inputmode="numeric" value="1" aria-label="數量" data-qty-input>
+          <button type="button" data-step="1" aria-label="增加數量">＋</button>
+        </div>
+        <button type="button" class="btn btn-lg buy-btn" data-buy data-key="pack:__combo__" data-label="農場搭配包" data-price="{{ combo_price }}">加入購物車<span class="buy-sum">NT${{ combo_price }}</span></button>
+      </div>
+      <dl class="facts">
+        <div><dt>種法</dt><dd>魚菜共生水耕，不用農藥和化肥</dd></div>
+        <div><dt>取貨</dt><dd>確認庫存後 LINE 通知，到 {% for k, v in pickup_locations.items() %}{{ v.label | replace('　', ' ') }}{% if not loop.last %} 或 {% endif %}{% endfor %} 取貨</dd></div>
+        <div><dt>付款</dt><dd>取貨時付款，下單不會先扣款</dd></div>
+        <div><dt>保存</dt><dd>連根裝袋冷藏，約 7 到 10 天</dd></div>
+      </dl>
+    </div>
+  </div>
+  {% if lettuces %}
+  <section class="sec-tight" aria-labelledby="may-h">
+    <h2 id="may-h">包裡可能會有</h2>
+    <div class="grid grid-4">
+      {% for p in lettuces if p.is_available %}{% if loop.index <= 8 %}{{ product_card(p, farm_by_id, pick_price, loop.index) }}{% endif %}{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+<div class="sticky-buy" id="sticky-buy" hidden>
+  <div><strong>農場搭配萵苣包</strong><span>NT${{ combo_price }} / 包</span></div>
+  <button type="button" class="btn" data-sticky-buy>加入購物車</button>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'store/base.html' %}
+{% block title %}購物說明｜取貨、付款、退換貨｜食在好蔬{% endblock %}
+{% block description %}食在好蔬怎麼下單、在哪裡取貨、怎麼付款，以及退換貨與隱私權說明。{% endblock %}
+{% block main %}
+<div class="wrap narrow">
+  <nav class="crumbs" aria-label="麵包屑"><ol><li><a href="/">首頁</a></li><li aria-current="page">購物說明</li></ol></nav>
+  <header class="page-head">
+    <h1>購物說明</h1>
+    <p class="lead">找不到答案？直接<a href="https://lin.ee/PJHXHVrQ" rel="noopener" target="_blank">在 LINE 問我們</a>。</p>
+  </header>
+
+  <nav class="toc" aria-label="本頁目錄">
+    <a href="#order">怎麼下單</a><a href="#pickup">取貨與付款</a><a href="#keep">保存</a><a href="#note">注意事項</a><a href="#return">退換貨</a><a href="#privacy">隱私權</a>
+  </nav>
+
+  <section class="faq" id="order">
+    <h2>怎麼下單</h2>
+    <details open><summary>需要註冊會員嗎？</summary><p>不用另外註冊。結帳時用 LINE 登入；第一次下單前，請先加入我們的 LINE 好友並輸入「登記」，留下姓名和電話。</p></details>
+    <details><summary>萵苣「搭配包」和「指定品種」有什麼不同？</summary><p>農場搭配包 NT${{ combo_price }}，由農場依當天採收混搭品種；指定品種每包 NT${{ pick_price }}，我們會盡量依你選的品種出貨，缺貨時會先用 LINE 跟你確認。每包約 400 公克。</p></details>
+    <details><summary>一次可以買多少？</summary><p>為了讓更多人買得到，每個 LINE 帳號每天最多訂 {{ daily_pack_limit }} 包萵苣；其他商品每樣每筆最多 {{ item_max_qty }} 件。</p></details>
+    <details><summary>合作農場的商品可以和萵苣一起買嗎？</summary><p>可以。全部放進同一台購物車、一次結帳，一起到取貨點拿。</p></details>
+  </section>
+
+  <section class="faq" id="pickup">
+    <h2>取貨與付款</h2>
+    <details open><summary>在哪裡取貨？</summary><p>確認庫存後，我們會用 LINE 通知你取貨。取貨地點：{% for k, v in pickup_locations.items() %}{{ v.label | replace('　', ' ') }}{% if not loop.last %}、{% endif %}{% endfor %}。</p></details>
+    <details><summary>怎麼付款？</summary><p>下單不會先扣款。取貨時付現，或依 LINE 通知的方式轉帳。取貨時出示 LINE 收到的 QR Code 即可。</p></details>
+    <details><summary>下單後可以取消嗎？</summary><p>在「我的訂單」裡，還沒確認的訂單可以自己取消；已確認的訂單請用 LINE 聯絡我們。</p></details>
+  </section>
+
+  <section class="faq" id="keep">
+    <h2>保存</h2>
+    <details open><summary>萵苣可以放多久？</summary><p>連根的萵苣用袋子裝好放冰箱冷藏，大約可以放 7 到 10 天。</p></details>
+    <details><summary>要洗嗎？</summary><p>雖然沒有使用農藥，仍建議用清水沖洗後再吃。</p></details>
+  </section>
+
+  <section class="faq" id="note">
+    <h2>注意事項</h2>
+    <p>本農場採自然農法栽培，菜根可能附有微小生物，屬正常現象，食用前請清洗乾淨。各品項產量每週浮動，下單後若缺貨，我們會主動以 LINE 通知並提供替代方案。</p>
+  </section>
+
+  <section class="faq" id="return">
+    <h2>退換貨</h2>
+    <p>生鮮蔬菜屬於容易腐敗的商品，原則上不接受退貨。取貨時若發現嚴重蟲蛀、腐爛或品項錯誤，請在<strong>取貨當天</strong>透過 LINE 官方帳號回報並附上照片，我們會在下次出貨時補償或全額退款。</p>
+  </section>
+
+  <section class="faq" id="privacy">
+    <h2>隱私權</h2>
+    <p>為了處理訂單與通知，我們會在你用 LINE 登入或下單時，蒐集並儲存<strong>姓名、電話、LINE ID 與訂單紀錄</strong>。這些資料只用於訂單處理與 LINE 通知，不會提供給第三方。</p>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+# ============================================================
+#  食在好蔬 — Caddy 反向代理
+#  Caddy 會自動向 Let's Encrypt 申請 HTTPS 憑證（需要 80/443 對外可達）
+#  app / push_server 是 docker-compose 的「服務名」，Caddy 同網路用名字直連
+# ============================================================
+
+eatgoodveg.com, www.eatgoodveg.com {
+
+	# LINE Webhook callback → push_server
+	handle /botgoodveg/callback {
+		reverse_proxy push_server:4999
+	}
+
+	# 取貨 QR 圖 → push_server（讀共用的 data/訂單，app 產生的圖在這）
+	handle /order-qr/* {
+		reverse_proxy push_server:4999
+	}
+
+	# 其餘全部（網站、後台、API）→ 主 app
+	handle {
+		reverse_proxy app:5000
+	}
+}

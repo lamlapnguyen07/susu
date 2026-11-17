@@ -1,0 +1,141 @@
+{% extends 'store/base.html' %}
+{% from 'store/_macros.html' import product_card, combo_card, photo, farm_cover %}
+{% block main %}
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">臺北北投・魚菜共生農場</p>
+      <h1>今天採收的萵苣，<br>和用心小農的好物，<br>一次買齊。</h1>
+      <p class="hero-lead">萵苣在北投的魚菜共生農場長大，不用農藥和化肥，連根出貨更耐放。再加上我們親自拜訪過的合作農場，放進同一台購物車。</p>
+      <div class="hero-cta">
+        <a class="btn btn-lg" href="/shop">逛這週的菜</a>
+        <a class="btn btn-ghost btn-lg" href="#how">怎麼買、怎麼取貨</a>
+      </div>
+      <ul class="trust" aria-label="我們的承諾">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>不用農藥和化肥</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>採收當天出貨</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>取貨時才付款</li>
+      </ul>
+    </div>
+    <figure class="hero-pic">
+      <img src="/img/site/site-7.jpg" alt="北投農場植物床上的紅、綠萵苣" width="1882" height="869" fetchpriority="high">
+      <figcaption>北投示範農場，植物床上準備採收的萵苣</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="harvest-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">這週採收</p>
+        <h2 id="harvest-h">現在下單，這週就能拿到</h2>
+      </div>
+      <a class="text-link" href="/shop">看全部商品</a>
+    </div>
+    {% if lettuces or specials %}
+    <div class="rail" tabindex="0" aria-label="這週採收的商品，可左右滑動">
+      {{ combo_card(combo_price) }}
+      {% for p in (lettuces + specials) if p.is_available %}{% if loop.index <= 7 %}{{ product_card(p, farm_by_id, pick_price, loop.index) }}{% endif %}{% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">商品資料暫時讀不到，請稍後再試，或直接<a href="https://lin.ee/PJHXHVrQ" rel="noopener">用 LINE 問我們</a>。</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="sec sec-tint" id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <p class="eyebrow">三步驟</p>
+    <h2 id="how-h">不用註冊，用 LINE 就能買</h2>
+    <ol class="steps">
+      <li><span class="step-n">1</span><h3>挑菜放進購物車</h3><p>萵苣按包賣，合作農場的商品單件買，全部放在同一台購物車。</p></li>
+      <li><span class="step-n">2</span><h3>用 LINE 登入送出</h3><p>選好取貨地點（{% for k, v in pickup_locations.items() %}{{ v.label | replace('　', ' ') }}{% if not loop.last %}、{% endif %}{% endfor %}），送出就完成，不會先扣款。</p></li>
+      <li><span class="step-n">3</span><h3>收到通知去取貨</h3><p>確認庫存後 LINE 通知你，到取貨點出示 QR Code，取貨時付款。</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="ways-h">
+  <div class="wrap">
+    <p class="eyebrow">兩種買法</p>
+    <h2 id="ways-h">自家萵苣，加上合作農場的好物</h2>
+    <div class="doors">
+      <a class="door" href="/shop?src=own">
+        {{ photo('/img/menu/sweet-crisp-2.jpg', '') }}
+        <div class="door-body">
+          <h3>北投自家的萵苣</h3>
+          <p>十種萵苣輪流採收。農場搭配包 NT${{ combo_price }}，想指定品種 NT${{ pick_price }}。</p>
+          <span class="text-link">逛自家萵苣</span>
+        </div>
+      </a>
+      <a class="door" href="/farms">
+        {% set f0 = farms[0] if farms else None %}
+        {% if f0 %}{{ farm_cover(f0) }}{% else %}{{ photo('/img/site/site-3.jpg', '') }}{% endif %}
+        <div class="door-body">
+          <h3>合作農場的好物</h3>
+          <p>{% if farms %}現在有 {{ farms | map(attribute='name') | join('、') }}，{% endif %}都是我們親自去過、看過怎麼種的農場。</p>
+          <span class="text-link">認識合作農場</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-tint" aria-labelledby="farm-h">
+  <div class="wrap split">
+    <img class="split-pic" src="/img/site/site-3.jpg" alt="北投示範農場內部" loading="lazy">
+    <div>
+      <p class="eyebrow">品牌故事</p>
+      <h2 id="farm-h">我們自己也是農友</h2>
+      <p class="quote">「好菜種得出來，卻不一定賣得出去。」</p>
+      <p>我們在北投用魚菜共生種萵苣，自己先遇過菜賣不出去的難題。替自己的菜找到出路之後，我們把同一條路打開給更多農友：農友專心種，我們幫忙賣。</p>
+      <a class="btn btn-ghost" href="/story">讀完整的故事</a>
+    </div>
+  </div>
+  <div class="wrap gallery">
+    <figure>{{ photo('/img/site/site-6.jpg', '長滿綠色萵苣的植物床') }}<figcaption>快可以採收的綠火焰萵苣</figcaption></figure>
+    <figure>{{ photo('/img/site/site-1.jpg', '育苗盤上的萵苣幼苗') }}<figcaption>種子在海綿裡發芽</figcaption></figure>
+    <figure>{{ photo('/img/site/site-5.jpg', '剛移植到水管的萵苣苗') }}<figcaption>移到水管裡繼續長大</figcaption></figure>
+  </div>
+</section>
+
+{% if farms %}
+<section class="sec" aria-labelledby="farms-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">合作農場</p><h2 id="farms-h">幫用心的農友，多開一條銷售的路</h2>
+        <p class="sec-sub">很多農友種得好，卻缺少銷售管道。你在這裡買的每一樣，都直接支持種它的人。</p></div>
+      <a class="text-link" href="/farms">看全部農場</a>
+    </div>
+    <div class="farm-cards">
+      {% for f in farms[:3] %}
+      <a class="farm-card" href="/farms/{{ f.id }}">
+        {{ farm_cover(f) }}
+        <div class="farm-card-body">
+          <p class="where">{{ f.region }}</p>
+          <h3>{{ f.name }}</h3>
+          {% if f.certification %}<p class="cert">{{ f.certification }}</p>{% endif %}
+          <p>{{ f.summary }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="sec sec-cta">
+  <div class="wrap cta-row">
+    <div>
+      <h2>每週採收，第一時間通知你</h2>
+      <p>加入 LINE 好友，採收、到貨、取貨提醒都會傳給你。</p>
+    </div>
+    <div class="cta-actions">
+      <a class="btn btn-line btn-lg" href="https://lin.ee/PJHXHVrQ" rel="noopener" target="_blank">加入 LINE 好友</a>
+      <a class="btn btn-light btn-lg" href="/shop">開始逛</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'store/base.html' %}
+{% from 'store/_macros.html' import product_card, photo, farm_cover %}
+{% block title %}{{ farm.name }}｜{{ farm.region }}｜合作農場｜食在好蔬{% endblock %}
+{% block description %}{{ farm.summary or farm.name }}{% endblock %}
+{% block og_image %}{% if farm.photos %}{{ request.url_root.rstrip('/') }}{{ farm.photos[0] }}{% else %}{{ super() }}{% endif %}{% endblock %}
+{% block main %}
+<div class="wrap">
+  <nav class="crumbs" aria-label="麵包屑"><ol><li><a href="/">首頁</a></li><li><a href="/farms">合作農場</a></li><li aria-current="page">{{ farm.name }}</li></ol></nav>
+
+  <header class="farm-hero">
+    <div class="farm-hero-pic">{{ farm_cover(farm, eager=True) }}</div>
+    <div class="farm-hero-body">
+      <p class="where">{{ farm.region }}</p>
+      <h1>{{ farm.name }}</h1>
+      {% if farm.certification %}<p class="cert">{{ farm.certification }}</p>{% endif %}
+      <p class="lead">{{ farm.summary }}</p>
+      {% if farm.crops %}<p class="crops"><b>種什麼</b>{{ farm.crops }}</p>{% endif %}
+      {% if goods %}<a class="btn btn-lg" href="#goods">看他們的商品</a>{% endif %}
+    </div>
+  </header>
+
+  {% if farm.story or farm.photos | length > 1 %}
+  <section class="farm-story" aria-labelledby="story-h">
+    <div>
+      <h2 id="story-h">認識{{ farm.name }}</h2>
+      {% if farm.story %}<div class="prose">{% for para in farm.story.split('\n') if para.strip() %}<p>{{ para }}</p>{% endfor %}</div>{% endif %}
+    </div>
+    {% if farm.photos | length > 1 %}<figure>{{ photo(farm.photos[1], farm.name ~ ' 的商品') }}</figure>{% endif %}
+  </section>
+  {% endif %}
+
+  {% if farm.gallery %}
+  <section class="farm-gallery" aria-labelledby="gal-h">
+    <h2 id="gal-h">走進{{ farm.name }}</h2>
+    <div class="fg-grid">
+      {% for g in farm.gallery %}
+      <figure class="fg-{{ loop.index }}"><img src="{{ g.src }}" alt="{{ g.caption or farm.name }}" loading="lazy">{% if g.caption %}<figcaption>{{ g.caption }}</figcaption>{% endif %}</figure>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if farm.cert_image or farm.cert_detail %}
+  <section class="cert-sec" id="cert" aria-labelledby="cert-h">
+    {% if farm.cert_image %}
+    <a class="cert-thumb" href="{{ farm.cert_image }}" target="_blank" rel="noopener" aria-label="開新分頁看完整的有機驗證證書">
+      <img src="{{ farm.cert_image }}" alt="{{ farm.name }} 的有機農產品驗證證書" loading="lazy">
+      <span class="cert-zoom">看完整證書</span>
+    </a>
+    {% endif %}
+    <div class="cert-body">
+      <p class="eyebrow">有機驗證</p>
+      <h2 id="cert-h">每一項都查得到</h2>
+      <p class="lead">這是 {{ farm.name }} 的有機農產品驗證證書，由第三方驗證機構核發。</p>
+      {% if farm.cert_detail %}
+      <dl class="facts cert-facts">
+        {% for line in farm.cert_detail.split('\n') if line.strip() %}
+        {% set kv = line.split('：', 1) %}
+        <div><dt>{{ kv[0] if kv | length > 1 else '' }}</dt><dd>{{ kv[1] if kv | length > 1 else kv[0] }}</dd></div>
+        {% endfor %}
+      </dl>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+  {% if farm.website %}<p><a class="text-link" href="{{ farm.website }}" rel="noopener nofollow" target="_blank">前往 {{ farm.name }} 的網站</a></p>{% endif %}
+
+  <section class="sec-tight" id="goods" aria-labelledby="goods-h">
+    <h2 id="goods-h">{{ farm.name }} 的商品</h2>
+    {% if goods %}
+    <div class="grid grid-4">{% for p in goods %}{{ product_card(p, farm_by_id, pick_price, loop.index) }}{% endfor %}</div>
+    {% else %}
+    <p class="empty">商品準備上架中。<a href="https://lin.ee/PJHXHVrQ" rel="noopener" target="_blank">加 LINE 好友</a>，上架時通知你。</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

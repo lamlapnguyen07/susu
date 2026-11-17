@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>北投魚菜共生萵苣｜食在好蔬（A 版・雜誌留白）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="mockbar">A 版・雜誌留白　<a href="../index.html">回到比較頁</a>　<a href="index.html">首頁</a>　<a href="veggies.html">好蔬頁</a></div>
+<header class="site-head"><div class="container head-row">
+  <a class="logo" href="index.html"><img src="../../../img/LOGO.png" alt="">食在好蔬</a>
+  <nav aria-label="主選單"><ul class="nav"><li><a href="#">市集</a></li><li><a href="veggies.html">我們的好蔬</a></li><li><a href="#">合作農場</a></li><li><a href="#">品牌故事</a></li><li><a href="#faq">取貨與配送</a></li></ul></nav>
+  <a class="cart" href="#">購物車 <span class="count" id="count">0</span></a>
+</div></header>
+<main>
+<div class="container">
+  <div class="hero">
+    <div><h1>在北投的水裡種萵苣</h1>
+      <p class="lead">魚養水，水養菜。我們不用農藥和化肥，菜在採收當天出貨。也能順手帶走合作農場的米、蛋和水果，一次結帳。</p>
+      <div class="acts"><a class="btn" href="veggies.html">看我們的好蔬</a><a class="btn ghost" href="#">我們怎麼開始的</a></div></div>
+    <img src="../../../img/site/site-1.jpg" alt="北投農場的水耕萵苣">
+  </div>
+  <div class="harvest"><div class="harvest-top"><h2>這週採收</h2><span>11/17 至 11/23・週二、週五採收</span></div><ul class="hlist"><li><img src="../../../img/menu/red-oak-1.jpg" alt="">紅橡木萵苣<span class="tag ok">充足</span></li><li><img src="../../../img/menu/sweet-romaine-1.jpg" alt="">甜蘿蔓<span class="tag ok">充足</span></li><li><img src="../../../img/menu/green-butter-1.jpg" alt="">綠奶油萵苣<span class="tag ok">充足</span></li><li><img src="../../../img/menu/red-flame-1.jpg" alt="">紅火焰萵苣<span class="tag low">剩少量</span></li><li><img src="../../../img/menu/arugula-1.jpg" alt="">芝麻葉<span class="tag low">剩少量</span></li><li><img src="../../../img/menu/kale-1.jpg" alt="">羽衣甘藍<span class="tag next">下週採收</span></li></ul></div>
+</div>
+<section><div class="container"><h2>兩種買法，一次結帳</h2><p class="lead">自家萵苣按包賣，合作農場的商品單件買，全部放進同一個購物車。</p>
+  <div class="two">
+    <a class="door" href="veggies.html"><img src="../../../img/menu/sweet-crisp-2.jpg" alt=""><div class="body"><h3>我們的好蔬</h3><p>十種萵苣輪流採收，搭配包 NT$200、自選包 NT$250。</p></div></a>
+    <a class="door" href="#"><div class="ph">合作農場照片待提供</div><div class="body"><h3>合作農場市集</h3><p>我們親自拜訪過的小農，米、蛋、當季水果。</p></div></a>
+  </div></div></section>
+<section style="padding-top:0"><div class="container split"><img src="../../../img/site/site-3.jpg" alt="示範農場">
+  <div><h2>一座十二坪的實驗農場</h2><p class="quote">「城市裡能不能不靠農藥，也種出天天吃得到的菜？」</p>
+  <p class="lead">2024 年我們開始研究把感測器裝進魚菜共生系統，2025 年在北投蓋了第一座示範農場。</p><a class="btn ghost" href="#">讀完整的故事</a></div></div></section>
+<section id="faq" style="padding-top:0"><div class="container"><h2>常見問題</h2><div class="faq"><details><summary>蔬菜可以放多久？</summary><p>連根的萵苣用袋子裝好放冰箱冷藏，大約可以放 7 到 10 天。</p></details><details><summary>合作農場的商品會和蔬菜一起寄嗎？</summary><p>待你決定：統一從北投出貨，或由各農場直送。</p></details><details><summary>可以自己到農場取貨嗎？</summary><p>可以。結帳時選「北投農場自取」，到貨後 LINE 會通知你取貨時間。</p></details><details><summary>魚菜共生的菜要洗嗎？</summary><p>沒有使用農藥，但仍建議用清水沖洗後再吃。</p></details></div></div></section>
+</main>
+<footer class="site-foot"><div class="container foot-row">
+  <div><strong>食在好蔬</strong><p>臺北市北投區一德里學園路<br>chihaoshu@eatgoodveg.com</p></div>
+  <ul><li><a href="#">市集</a></li><li><a href="veggies.html">我們的好蔬</a></li><li><a href="#">合作農場</a></li></ul>
+  <ul><li><a href="#">品牌故事</a></li><li><a href="#faq">取貨與配送</a></li><li><a href="#">隱私權政策</a></li></ul>
+</div></footer>
+<script>
+let n = 0;
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-add]'); if (!b) return;
+  document.getElementById('count').textContent = ++n;
+  const t = b.textContent; b.textContent = '已加入'; b.disabled = true;
+  setTimeout(() => { b.textContent = t; b.disabled = false; }, 1200);
+});
+document.querySelectorAll('[data-filter]').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('[data-filter]').forEach(x => x.setAttribute('aria-pressed', x === b));
+  document.querySelectorAll('[data-kind]').forEach(el => el.hidden = b.dataset.filter !== 'all' && el.dataset.kind !== b.dataset.filter);
+}));
+</script>
+</body></html>

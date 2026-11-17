@@ -1,0 +1,89 @@
+# ============================================================
+# 🔒 Secrets — 絕對不能 commit
+# ============================================================
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets.json
+# 2FA 設定 QR（內含 TOTP 密鑰，絕不入版控）
+2fa_setup_qr.png
+**/2fa_setup_qr.png
+start_dev.ps1
+start_dev.sh
+
+# ============================================================
+# Python
+# ============================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+# 管理操作 audit log（含 admin user / IP，視為敏感）
+audit.log
+
+# ============================================================
+# 此專案專屬
+# ============================================================
+# 訂單 QRCode 圖（含 order_id|token，不入版控）
+訂單/
+# 商品管理後台上傳的商品圖（執行期產生，不入版控）
+product-images/
+# 壓測腳本若有產出 result 檔
+loadtest_results/
+# Claude / AI tool 殘留
+.claude/
+# 桌面 zip / 雜檔
+files*.zip
+
+# ============================================================
+# 不公開：舊版副本、內部維運文件
+# ============================================================
+# 舊的 NAS 上傳副本（與 NAS_Deploy/ 重複，內容較舊）
+上傳nas/
+上傳nas.rar
+# 舊 PyQt 桌面版（含舊主機設定）
+main (2).py
+# 內部維運安全清單（含主機與備份指令）
+docs/伺服器維運安全清單.md
+# 本機預覽 / 暫存
+*.rar

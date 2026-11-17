@@ -1,0 +1,7 @@
+# push_sever.py（LINE 通知伺服器 / worker）依賴
+# 固定網域版（已移除 ngrok）。正式部署可改用 requirements-lock.txt
+Flask>=2.3
+mysql-connector-python>=8.0
+python-dotenv>=1.0
+line-bot-sdk>=3.0          # linebot：LINE Messaging API SDK
+requests>=2.31            # line-bot-sdk 連線用

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>掃碼核銷 · 食在好蔬</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/redeem.css') }}">
+</head>
+<body>
+
+<div class="admin-shell">
+
+  <header class="site-header admin-header">
+    <a href="{{ url_for('admin_page') }}" class="brand-logo">
+      <img src="/img/LOGO.png" alt="食在好蔬" class="logo-img">
+      <div class="logo-text-wrap">
+        <span class="logo-text">食在好蔬</span>
+        <span class="logo-sub">Good Veggie</span>
+      </div>
+    </a>
+    <div class="spacer"></div>
+    <div class="meta">
+      <a href="{{ url_for('admin_page') }}" class="rdm-backlink">← 回後台</a>
+      <span class="timer" id="idle-timer" title="閒置自動登出倒數">--:--</span>
+      <button class="logout" id="logout-btn">登出</button>
+    </div>
+  </header>
+
+  <main class="redeem-main">
+    <h1 class="rdm-title serif">掃碼核銷 · 取貨</h1>
+    <p class="rdm-sub muted">請顧客出示取貨 QR，對準框內。核對訂單與金額、收現金後按「確認核銷」。</p>
+
+    <!-- 掃描區 -->
+    <section class="rdm-scanner" id="scanner-card">
+      <div class="rdm-cam-wrap">
+        <video id="cam" playsinline muted></video>
+        <div class="rdm-frame" aria-hidden="true"></div>
+        <div class="rdm-cam-hint" id="cam-hint">按下方按鈕開始掃描</div>
+      </div>
+      <canvas id="frame-canvas" hidden></canvas>
+      <div class="rdm-scan-actions">
+        <button class="btn-primary" id="start-btn">開始掃描</button>
+        <button class="btn-ghost" id="stop-btn" hidden>停止</button>
+      </div>
+      <p class="rdm-status" id="scan-status" role="status"></p>
+    </section>
+
+    <!-- 訂單摘要 / 結果 -->
+    <section class="rdm-result" id="result" hidden></section>
+  </main>
+
+</div>
+
+<script>
+  window.__IDLE_MIN__ = {{ idle_timeout_min }};
+  window.__CSRF__ = {{ csrf_token | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/vendor/jsQR.js') }}"></script>
+<script src="{{ url_for('static', filename='js/redeem.js') }}"></script>
+
+</body>
+</html>

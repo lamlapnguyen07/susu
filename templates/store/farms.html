@@ -1,0 +1,43 @@
+{% extends 'store/base.html' %}
+{% from 'store/_macros.html' import photo, farm_cover %}
+{% block title %}合作農場｜食在好蔬{% endblock %}
+{% block description %}食在好蔬合作的農場：每一家都是我們親自去過、看過怎麼種的。{% endblock %}
+{% block main %}
+<div class="wrap">
+  <nav class="crumbs" aria-label="麵包屑"><ol><li><a href="/">首頁</a></li><li aria-current="page">合作農場</li></ol></nav>
+  <header class="page-head">
+    <h1>合作農場</h1>
+    <p class="lead">農友專心種，我們幫忙賣。上架的條件很簡單：我們親自去過、看過怎麼種，也願意買回家吃。</p>
+  </header>
+
+  {% if farms %}
+  <div class="farm-list">
+    {% for f in farms %}
+    {% set goods = farm_goods | selectattr('farm_id', 'equalto', f.id) | list %}
+    <article class="farm-row">
+      <a class="farm-row-pic" href="/farms/{{ f.id }}" tabindex="-1" aria-hidden="true">{{ farm_cover(f) }}</a>
+      <div class="farm-row-body">
+        <p class="where">{{ f.region }}</p>
+        <h2><a href="/farms/{{ f.id }}">{{ f.name }}</a></h2>
+        {% if f.certification %}<p class="cert">{{ f.certification }}</p>{% endif %}
+        <p>{{ f.summary }}</p>
+        {% if f.crops %}<p class="crops"><b>種什麼</b>{{ f.crops }}</p>{% endif %}
+        <div class="row-actions">
+          <a class="btn" href="/farms/{{ f.id }}">認識這家農場</a>
+          {% if goods %}<a class="text-link" href="/shop?src=farm-{{ f.id }}">買他們的商品（{{ goods | length }}）</a>{% else %}<span class="muted">商品準備上架中</span>{% endif %}
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty">合作農場正在準備中。</p>
+  {% endif %}
+
+  <aside class="join">
+    <h2>你也是用心種植的農友？</h2>
+    <p>如果你的種法經得起參觀，我們很想認識你。</p>
+    <a class="btn btn-ghost" href="mailto:chihaoshu@eatgoodveg.com?subject=%E5%90%88%E4%BD%9C%E8%BE%B2%E5%A0%B4%E6%B4%BD%E8%A9%A2">寫信給我們</a>
+  </aside>
+</div>
+{% endblock %}

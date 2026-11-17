@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # ── Caddy 反向代理（自動 HTTPS）──────────────────────
+  caddy:
+    image: caddy:2-alpine
+    container_name: nas_caddy
+    ports:
+      - "7080:80"
+      - "7443:443"
+      - "7443:443/udp"   # HTTP/3 (QUIC)
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data      # 儲存 Let's Encrypt 憑證
+      - caddy_config:/config
+    restart: unless-stopped
+    depends_on:
+      - app
+      - push_server
+
+  # ── 主網站 app.py ─────────────────────────────────
+  app:
+    build:
+      context: ./NAS_App
+      dockerfile: Dockerfile
+    container_name: nas_app
+    ports:
+      - "7500:5000"
+    restart: unless-stopped
+    volumes:
+      - ./NAS_App/img:/app/img
+      - ./NAS_App/訂單:/app/訂單
+      - ./NAS_App/audit.log:/app/audit.log
+
+  # ── LINE 推播 push_sever.py ───────────────────────
+  push_server:
+    build:
+      context: ./NAS_PushServer
+      dockerfile: Dockerfile
+    container_name: nas_push_server
+    ports:
+      - "7499:4999"
+    restart: unless-stopped
+    volumes:
+      - ./NAS_PushServer/img:/app/img
+      - ./NAS_PushServer/訂單:/app/訂單
+
+volumes:
+  caddy_data:
+  caddy_config:

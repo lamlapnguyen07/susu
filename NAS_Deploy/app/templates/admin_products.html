@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商品管理 · 食在好蔬</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+<div class="admin-shell">
+
+  <header class="site-header admin-header">
+    <a href="{{ url_for('admin_page') }}" class="brand-logo">
+      <img src="/img/LOGO.png" alt="食在好蔬" class="logo-img">
+      <div class="logo-text-wrap">
+        <span class="logo-text">食在好蔬</span>
+        <span class="logo-sub">Good Veggie</span>
+      </div>
+    </a>
+    <div class="spacer"></div>
+    <div class="meta">
+      <a href="{{ url_for('admin_page') }}" class="redeem-link" title="回到訂單後台">← 返回訂單</a>
+      <span class="user">Hi, {{ user }}</span>
+      <span class="timer" id="idle-timer" title="閒置自動登出倒數">--:--</span>
+      <button class="logout" id="logout-btn">登出</button>
+    </div>
+  </header>
+
+  <main class="prod-main">
+
+    <div class="prod-head">
+      <div class="title-block">
+        <span class="eyebrow">Products · 商品管理</span>
+        <h1>上架商品</h1>
+        <p class="prod-intro">這裡是商品的唯一資料源 —— 修改後，<strong>首頁</strong>與<strong>點餐頁</strong>都會同步更新。標為「暫無供應」的商品仍會顯示，但會變灰且無法下單。</p>
+      </div>
+      <button class="btn btn-primary" id="prod-add-btn" type="button">＋ 新增商品</button>
+    </div>
+
+    <div class="prod-grid" id="prod-grid">
+      <div class="prod-empty" id="prod-loading">載入中…</div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ===== 編輯 / 新增 商品 Modal ===== -->
+<div class="modal-backdrop prod-modal-backdrop" id="prod-modal">
+  <div class="modal prod-modal">
+    <span class="eyebrow" id="prod-modal-eyebrow">Edit Product</span>
+    <h3 id="prod-modal-title">編輯商品</h3>
+
+    <form id="prod-form" autocomplete="off">
+      <input type="hidden" id="f-id">
+
+      <!-- 圖片區（最多 2 張）-->
+      <div class="f-block">
+        <label class="f-label">商品照片（最多 2 張）</label>
+        <p class="f-hint">點圖片即可上傳更換。建議正方形、JPG／PNG、單張 ≤ 3MB。系統會自動壓縮與重新編碼。</p>
+        <div class="f-imgs">
+          <button type="button" class="f-imgslot" data-slot="1" id="f-imgslot-1">
+            <img class="f-img-preview" id="f-img-1" alt="">
+            <span class="f-img-placeholder" id="f-imgph-1">＋ 照片 1</span>
+            <span class="f-img-edit">更換</span>
+          </button>
+          <button type="button" class="f-imgslot" data-slot="2" id="f-imgslot-2">
+            <img class="f-img-preview" id="f-img-2" alt="">
+            <span class="f-img-placeholder" id="f-imgph-2">＋ 照片 2</span>
+            <span class="f-img-edit">更換</span>
+          </button>
+        </div>
+        <input type="file" id="f-img-input" accept="image/jpeg,image/png,image/webp" hidden>
+        <p class="f-imgnote" id="f-imgnote">新商品請先按「儲存」建立後，再上傳照片。</p>
+      </div>
+
+      <div class="f-row">
+        <div class="f-block">
+          <label class="f-label" for="f-name">商品名稱 <span class="req">*</span></label>
+          <input type="text" id="f-name" class="f-input" maxlength="100" placeholder="例：紅奶油萵苣">
+        </div>
+        <div class="f-block">
+          <label class="f-label" for="f-name-en">英文名稱</label>
+          <input type="text" id="f-name-en" class="f-input" maxlength="100" placeholder="Red Butter Lettuce">
+        </div>
+      </div>
+
+      <div class="f-row">
+        <div class="f-block">
+          <label class="f-label" for="f-category">分類標籤</label>
+          <input type="text" id="f-category" class="f-input" maxlength="100" placeholder="一般水耕萵苣">
+        </div>
+        <div class="f-block">
+          <label class="f-label" for="f-kind">品項類型</label>
+          <select id="f-kind" class="f-input">
+            <option value="standard">一般萵苣（可入組合包 / 自選）</option>
+            <option value="special">特殊品項（單獨加價）</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="f-row">
+        <div class="f-block" id="f-price-block" hidden>
+          <label class="f-label" for="f-price">加價金額（特殊品項，每份 NT$）</label>
+          <input type="number" id="f-price" class="f-input" min="0" max="100000" step="5" placeholder="150">
+        </div>
+        <div class="f-block">
+          <label class="f-label" for="f-sort">排序（數字越小越前面）</label>
+          <input type="number" id="f-sort" class="f-input" min="0" max="9999" step="1" placeholder="0">
+        </div>
+      </div>
+
+      <div class="f-block">
+        <label class="f-label" for="f-desc">簡短介紹（卡片 / Modal 第一段）</label>
+        <textarea id="f-desc" class="f-input f-area" rows="2" maxlength="2000" placeholder="一句話描述這款菜的特色…"></textarea>
+      </div>
+      <div class="f-block">
+        <label class="f-label" for="f-features">營養特色</label>
+        <textarea id="f-features" class="f-input f-area" rows="2" maxlength="2000"></textarea>
+      </div>
+      <div class="f-block">
+        <label class="f-label" for="f-nutrition">營養成分</label>
+        <textarea id="f-nutrition" class="f-input f-area" rows="2" maxlength="2000"
+                  placeholder="維他命 B3、維他命 C、鉀、鈣、膳食纖維…"></textarea>
+      </div>
+      <div class="f-block">
+        <label class="f-label" for="f-eating">建議吃法</label>
+        <textarea id="f-eating" class="f-input f-area" rows="2" maxlength="2000"></textarea>
+      </div>
+      <div class="f-block">
+        <label class="f-label" for="f-pairing">推薦搭配</label>
+        <textarea id="f-pairing" class="f-input f-area" rows="2" maxlength="2000"></textarea>
+      </div>
+
+      <label class="f-toggle">
+        <input type="checkbox" id="f-available" checked>
+        <span class="f-toggle-track"><span class="f-toggle-thumb"></span></span>
+        <span class="f-toggle-label">正常供應中（取消勾選 → 顯示「暫無供應」且無法下單）</span>
+      </label>
+
+      <div class="prod-modal-actions">
+        <button type="button" class="btn btn-ghost" id="prod-cancel">取消</button>
+        <button type="submit" class="btn btn-primary" id="prod-save">儲存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 確認 modal -->
+<div class="modal-backdrop" id="confirm-modal">
+  <div class="modal">
+    <span class="eyebrow">Confirm</span>
+    <h3 id="confirm-title">確定執行此操作？</h3>
+    <p id="confirm-body" class="muted" style="font-family:var(--font-serif); font-style:italic; margin-top: 8px;"></p>
+    <div class="actions">
+      <button class="btn btn-ghost" id="confirm-cancel">取消</button>
+      <button class="btn btn-danger" id="confirm-ok">確定</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-stack"></div>
+
+<script>
+  window.__IDLE_MIN__ = {{ idle_timeout_min }};
+  window.__CSRF__ = {{ csrf_token | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/admin_products.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>食在好蔬 Good Veggie — 天然無毒，營養十足</title>
+<link rel="icon" href="/img/LOGO.png">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#home" class="nav-logo">
+    <img src="/img/LOGO.png" alt="食在好蔬" class="logo-img">
+    <div>
+      <div class="logo-text">食在好蔬</div>
+      <span class="logo-sub">Good Veggie</span>
+    </div>
+  </a>
+
+  <button class="nav-burger" id="nav-burger" aria-label="開啟選單" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#home" data-nav="home">首頁</a></li>
+    <li><a href="#aquaponics" data-nav="aquaponics">魚菜共生</a></li>
+    <li><a href="#products" data-nav="products">當季商品</a></li>
+    <li><a href="#about" data-nav="about">關於我們</a></li>
+    <li><a href="#contact" data-nav="contact">聯絡我們</a></li>
+    <li><a href="/pos" class="nav-cta">立即訂購 →</a></li>
+  </ul>
+</nav>
+
+<div class="view" id="view-home" data-view="home">
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag"><span class="dot"></span>台北在地魚菜共生農場</div>
+    <h1 class="hero-h1">
+      自然<em>循環</em>，<br>
+      讓每口蔬菜<br>
+      與你<em>同在</em>
+    </h1>
+    <p class="hero-desc">
+      結合魚與植物的共生生態，無農藥、零化肥，直送餐桌的新鮮萵苣。當日採收，當日上架——從育苗到餐桌，全程可溯源。
+    </p>
+    <div class="hero-actions">
+      <a href="/pos" class="btn-primary">立即訂購 →</a>
+      <a href="#aquaponics" class="btn-outline">了解魚菜共生</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">90<small>%</small></span>
+        <span class="stat-label">節省用水</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">0</span>
+        <span class="stat-label">農藥使用</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">365</span>
+        <span class="stat-label">天全年供應</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <!-- 幻燈片輪播 -->
+    <div class="hero-slider" id="hero-slider">
+      <div class="slide active" style="background-image: url('/img/site/site-1.jpg')"></div>
+      <div class="slide" style="background-image: url('/img/site/site-2.jpg')"></div>
+      <div class="slide" style="background-image: url('/img/site/site-3.jpg')"></div>
+      <div class="slide" style="background-image: url('/img/site/site-4.jpg')"></div>
+      <div class="slide" style="background-image: url('/img/site/site-5.jpg')"></div>
+      <div class="slide" style="background-image: url('/img/site/site-6.jpg')"></div>
+      <div class="slide" style="background-image: url('/img/site/site-7.jpg')"></div>
+    </div>
+
+    <div class="hero-controls">
+      <div class="hero-dots" id="hero-dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="products-header">
+    <div>
+      <div class="section-tag"><span class="rule"></span>當季萵苣</div>
+      <h2 class="section-h2">從水中到餐桌</h2>
+    </div>
+    <a href="/pos" class="btn-outline">前往訂購 →</a>
+  </div>
+  <div class="prod-filter" id="prod-filter" role="tablist">
+    <button type="button" class="prod-filter-btn is-active" data-kind="all">全部</button>
+    <button type="button" class="prod-filter-btn" data-kind="standard">一般萵苣</button>
+    <button type="button" class="prod-filter-btn" data-kind="special">特殊品項</button>
+  </div>
+  <div class="products-grid" id="products-grid"></div>
+</section>
+
+</div><!-- /view-home -->
+
+<div class="view" id="view-aquaponics" data-view="aquaponics">
+<!-- WHAT IS AQUAPONICS -->
+<section id="what">
+  <div class="section-head">
+    <div class="section-tag"><span class="rule"></span>什麼是魚菜共生</div>
+    <h2 class="section-h2">魚與蔬菜，<br>在水中共同生長</h2>
+  </div>
+
+  <div class="what-grid">
+    <div class="what-visual">
+      <picture>
+        <source media="(max-width: 900px)" srcset="/img/aquaponics-flow_phone.png">
+        <img src="/img/aquaponics-flow.png"
+             alt="魚菜共生循環方式：1) 魚的家 → 2) 硝化菌的家 → 3) 植物的家 → 4) 乾淨的水回到魚的家"
+             class="cycle-image"
+             loading="lazy">
+      </picture>
+    </div>
+    <div class="what-steps">
+      <div class="step fade-up">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">魚類產出養分</div>
+          <p>魚的排泄物溶於水中，形成天然有機氮源，成為植物最佳的天然肥料。</p>
+        </div>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">益菌轉化氨氮</div>
+          <p>系統中的有益微生物將氨氮分解轉化為硝酸鹽，讓植物能夠有效吸收利用。</p>
+        </div>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">植物淨化水質</div>
+          <p>蔬菜吸收養分的同時也過濾了水中多餘成分，將潔淨的水回流至魚槽，完成完美循環。</p>
+        </div>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">永續封閉循環</div>
+          <p>整個系統用水量比傳統農業節省高達 90%，全程無需農藥或化學肥料介入。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /view-aquaponics -->
+
+<div class="view" id="view-about" data-view="about">
+  <div class="about-tabs" id="about-tabs" role="tablist">
+    <button type="button" class="about-tab is-active" data-panel="about">關於我們</button>
+    <button type="button" class="about-tab" data-panel="brand">品牌理念</button>
+    <button type="button" class="about-tab" data-panel="esg">永續 ESG</button>
+  </div>
+<!-- ABOUT -->
+<div class="about-panel" data-panel="about">
+<section id="about">
+  <div class="about-grid">
+    <div class="about-left">
+      <div class="section-tag"><span class="rule"></span>關於我們</div>
+      <h2 class="section-h2">一群相信<br>魚菜共生可以不一樣的人</h2>
+      <p class="section-desc">
+        我們是來自台北的農業團隊，由農業專家、工程師與生態學家組成。從 2024 年起在台北建立第一座實驗規模的魚菜共生農場，希望將永續農業帶入每個家庭的日常。
+      </p>
+      <div class="about-values">
+        <div class="value-item">
+          <div class="value-num">01</div>
+          <div class="value-title">節水永續</div>
+          <div class="value-desc">比傳統農業節省 90% 用水，守護台灣的水資源。</div>
+        </div>
+        <div class="value-item">
+          <div class="value-num">02</div>
+          <div class="value-title">科技農業</div>
+          <div class="value-desc">IoT 感測器 24 小時監控，確保生態系穩定健康。</div>
+        </div>
+        <div class="value-item">
+          <div class="value-num">03</div>
+          <div class="value-title">在地生產</div>
+          <div class="value-desc">台北在地農場，縮短食物里程，新鮮即時供應。</div>
+        </div>
+        <div class="value-item">
+          <div class="value-num">04</div>
+          <div class="value-title">透明溯源</div>
+          <div class="value-desc">每批商品均可掃碼查看生長環境與採收記錄。</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="team-intro">
+        <div>
+          <div class="team-header">我們的故事</div>
+          <div class="team-sub">從一個對魚菜共生感到有潛力的期待出發，我們想找到一個讓魚菜共生更有創造力、更友善環境的方式。</div>
+        </div>
+        <div class="team-divider"></div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div>
+            <div class="tl-year">2024</div>
+            <div class="tl-text">創辦人開始研究智慧物聯網融入魚菜共生的可行性</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div>
+            <div class="tl-year">2025</div>
+            <div class="tl-text">獲得新創補助，於台北建立首座示範農場（12 坪）</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div>
+            <div class="tl-year">2026</div>
+            <div class="tl-text">正式對外販售，推出企業採購方案與會員 LINE 通知</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div>
+            <div class="tl-year">2027 →</div>
+            <div class="tl-text">預計擴建第二農場，規劃推出家用套件與 B2B 供應鏈服務</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div><!-- /panel about -->
+
+<!-- BRAND -->
+<div class="about-panel" data-panel="brand" hidden>
+<section id="brand">
+  <div class="brand-inner">
+    <div class="section-tag center"><span class="rule"></span>品牌理念<span class="rule"></span></div>
+    <h2 class="section-h2">我們相信的三件事</h2>
+    <p class="section-desc center">永續農業不應該是一種犧牲，而是一種更聰明的選擇。我們的每一個產品決策，都圍繞著這三個核心價值。</p>
+  </div>
+  <div class="brand-pillars">
+    <div class="pillar fade-up">
+      <div class="pillar-num">01</div>
+      <div class="pillar-title">自然即最好的肥料</div>
+      <p class="pillar-desc">魚的代謝廢物是植物最天然的養分來源，我們不添加任何化學物質，讓自然做自然的事。</p>
+    </div>
+    <div class="pillar fade-up">
+      <div class="pillar-num">02</div>
+      <div class="pillar-title">透明才是信任的基礎</div>
+      <p class="pillar-desc">每一顆蔬菜、每一條魚都有完整的生長紀錄，消費者有權利知道食物的完整旅程。</p>
+    </div>
+    <div class="pillar fade-up">
+      <div class="pillar-num">03</div>
+      <div class="pillar-title">小農場也能有大影響</div>
+      <p class="pillar-desc">我們的目標不是取代傳統農業，而是建立可複製的模型，讓更多人能在城市中種出自己的食物。</p>
+    </div>
+  </div>
+</section>
+</div><!-- /panel brand -->
+
+  <div class="about-panel" data-panel="esg" hidden>
+    <div class="section-tag center"><span class="rule"></span>永續 ESG<span class="rule"></span></div>
+    <div class="esg-subtabs" role="tablist">
+      <button type="button" class="esg-subtab is-active" data-esg="E">環境 E</button>
+      <button type="button" class="esg-subtab" data-esg="S">社會 S</button>
+      <button type="button" class="esg-subtab" data-esg="G">治理 G</button>
+    </div>
+    <div class="esg-pane" data-esg="E"><p class="section-desc">（環境面內容待補）</p></div>
+    <div class="esg-pane" data-esg="S" hidden><p class="section-desc">（社會面內容待補）</p></div>
+    <div class="esg-pane" data-esg="G" hidden><p class="section-desc">（治理面內容待補）</p></div>
+  </div>
+
+</div><!-- /view-about -->
+
+<div class="view" id="view-contact" data-view="contact">
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="section-tag"><span class="rule"></span>聯絡我們</div>
+      <h2 class="section-h2">想多了解？<br>歡迎與我們聊聊</h2>
+      <h3>讓我們為您服務</h3>
+      <p>無論是個人訂購、企業採購、或是對魚菜共生有任何疑問，我們的團隊都很樂意協助你。</p>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18">
+              <path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+          </div>
+          <div class="contact-item-text">
+            <div class="ci-label">農場地址</div>
+            <div class="ci-val">臺北市北投區一德里學園路</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <path d="M3 7l9 6 9-6"/>
+            </svg>
+          </div>
+          <div class="contact-item-text">
+            <div class="ci-label">Email</div>
+            <div class="ci-val">chihaoshu@eatgoodveg.com</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-qr">
+      <div class="qr-join-title">加入會員</div>
+      <div class="qr-pair">
+        <button class="qr-card" type="button"
+                data-qr="/img/LINE%E5%A5%BD%E5%8F%8B.jpg"
+                data-qr-label="LINE 好友"
+                data-qr-url="https://lin.ee/PJHXHVrQ">
+          <div class="qr-eyebrow">LINE · 好友</div>
+          <img src="/img/LINE%E5%A5%BD%E5%8F%8B.jpg" alt="LINE 好友 QR Code" class="qr-img"
+               loading="lazy" onerror="this.style.display='none'">
+          <div class="qr-desc">加入官方好友，下單後<br>自動推播到貨通知。</div>
+          <span class="qr-tap-hint">點擊放大或加入 →</span>
+        </button>
+        <button class="qr-card" type="button"
+                data-qr="/img/LINE%E7%A4%BE%E7%BE%A4.png"
+                data-qr-label="LINE 社群"
+                data-qr-url="https://line.me/ti/g2/mUd3GNKn6v5wOHO_eJoMVKaZU9BQGeEmU8SaYQ?utm_source=invitation&utm_medium=link_copy&utm_campaign=default">
+          <div class="qr-eyebrow">LINE · 社群</div>
+          <img src="/img/LINE%E7%A4%BE%E7%BE%A4.png" alt="LINE 社群 QR Code" class="qr-img"
+               loading="lazy" onerror="this.style.display='none'">
+          <div class="qr-desc">追蹤每日採收動態，<br>與其他蔬友互動交流。</div>
+          <span class="qr-tap-hint">點擊放大或加入 →</span>
+        </button>
+      </div>
+      <a href="/pos" class="btn-primary qr-cta">立即訂購 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== POLICY 區（注意事項 / 退換貨 / 隱私權）========== -->
+<section id="policy">
+  <div class="policy-head">
+    <div class="section-tag center"><span class="rule"></span>購買須知<span class="rule"></span></div>
+    <h2 class="section-h2 center-h2">下單前，請花一分鐘了解</h2>
+  </div>
+  <div class="policy-tabs" id="policy-tabs" role="tablist">
+    <button type="button" class="policy-tab is-active" data-policy="note">注意事項</button>
+    <button type="button" class="policy-tab" data-policy="return">退換貨方式</button>
+    <button type="button" class="policy-tab" data-policy="privacy">隱私權條款</button>
+  </div>
+  <div class="policy-grid">
+
+    <article class="policy-card policy-panel" data-policy="note">
+      <div class="policy-num">01</div>
+      <h3 class="policy-title">注意事項</h3>
+      <p class="policy-text">
+        本農場採取<strong>自然農法</strong>栽培，蔬菜菜根可能附有微小生物殘留，
+        屬正常現象。<strong>食用前請務必清洗乾淨</strong>。<br><br>
+        由於各品項當季產量浮動，下單後若有缺貨情形，農場將主動以 LINE 通知並提供替代方案。
+        
+      </p>
+    </article>
+
+    <article class="policy-card policy-panel" data-policy="return" hidden>
+      <div class="policy-num">02</div>
+      <h3 class="policy-title">退換貨方式</h3>
+      <p class="policy-text">
+        生鮮蔬菜屬不易保存商品，<strong>原則上不接受退貨</strong>。<br><br>
+        若於取貨時發現品質瑕疵（嚴重蟲蛀／腐爛／品項錯誤），請於
+        <strong>取貨當日</strong>透過 LINE 官方帳號回報並附照片，
+        我們將於下次出貨時補償或全額退款。
+        
+      </p>
+    </article>
+
+    <article class="policy-card policy-panel" data-policy="privacy" hidden>
+      <div class="policy-num">03</div>
+      <h3 class="policy-title">隱私權條款</h3>
+      <p class="policy-text">
+        為提供訂單通知服務，我們會在您透過 LINE 登入或下單時，蒐集並儲存
+        <strong>姓名、電話、LINE ID 及訂單記錄</strong>。
+        資料僅用於訂單處理與 LINE 推播，不會提供給第三方。
+      </p>
+    </article>
+
+  </div>
+</section>
+
+</div><!-- /view-contact -->
+
+<!-- ========== QR Fullscreen Modal ========== -->
+<div class="qr-modal" id="qr-modal" aria-hidden="true">
+  <div class="qr-modal-backdrop" id="qr-modal-close"></div>
+  <div class="qr-modal-box">
+    <div class="qr-modal-label" id="qr-modal-label"></div>
+    <img id="qr-modal-img" src="" alt="">
+    <div class="qr-modal-hint">給朋友相機掃描，或長按圖片儲存。<br>在手機開啟可直接點下方按鈕加入。</div>
+    <div class="qr-modal-actions">
+      <a id="qr-modal-link" href="#" target="_blank" rel="noopener" class="qr-modal-cta">在 LINE 開啟 →</a>
+      <button class="qr-modal-close-btn" id="qr-modal-close-btn">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== Product Detail Modal ========== -->
+<div class="product-modal" id="product-modal" aria-hidden="true">
+  <div class="pm-backdrop"></div>
+  <div class="pm-box" role="dialog" aria-modal="true">
+    <button class="pm-close" id="pm-close" aria-label="關閉">×</button>
+    <div class="pm-grid">
+      <div class="pm-photos">
+        <div class="pm-main" id="pm-main">
+          <img id="pm-main-img" src="" alt="">
+          <button class="pm-nav pm-prev" id="pm-prev" aria-label="上一張" type="button">‹</button>
+          <button class="pm-nav pm-next" id="pm-next" aria-label="下一張" type="button">›</button>
+          <div class="pm-counter" id="pm-counter"></div>
+        </div>
+        <div class="pm-thumbs" id="pm-thumbs"></div>
+      </div>
+      <div class="pm-content">
+        <div class="pm-eyebrow" id="pm-category"></div>
+        <h2 id="pm-name" class="pm-name"></h2>
+        <div class="pm-en" id="pm-en"></div>
+        <p class="pm-desc" id="pm-desc"></p>
+
+        <div class="pm-meta">
+          <div class="pm-meta-row">
+            <span class="pm-meta-label">特性</span>
+            <p id="pm-features"></p>
+          </div>
+          <div class="pm-meta-row" id="pm-nutrition-row">
+            <span class="pm-meta-label">營養成分</span>
+            <p id="pm-nutrition"></p>
+          </div>
+          <div class="pm-meta-row">
+            <span class="pm-meta-label">食用方式</span>
+            <p id="pm-eating"></p>
+          </div>
+          <div class="pm-meta-row">
+            <span class="pm-meta-label">建議搭配</span>
+            <p id="pm-pairing"></p>
+          </div>
+        </div>
+
+        <a href="/pos" class="btn-primary pm-cta">立即訂購 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 回到頂部 FAB -->
+<button class="back-to-top" id="back-to-top" aria-label="回到頂部" type="button">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5"/>
+    <path d="M5 12l7-7 7 7"/>
+  </svg>
+</button>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <img src="/img/LOGO.png" alt="" class="footer-logo">
+    <div>
+      食在好蔬 Good Veggie
+      <span>© Good Veggie. All rights reserved.</span>
+    </div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#aquaponics">魚菜共生</a></li>
+    <li><a href="#products">當季商品</a></li>
+    <li><a href="#about">關於</a></li>
+    <li><a href="/pos">訂購</a></li>
+  </ul>
+  <div class="footer-copy">台灣製造 · 永續農業</div>
+
+  <div class="footer-visit" aria-live="polite">
+    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+    <span>已造訪 <strong id="visitor-count">—</strong> 人次</span>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/landing.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>訂購 · 食在好蔬</title>
+<link rel="icon" href="/img/LOGO.png">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pos.css') }}">
+{% if liff_id %}
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+{% endif %}
+</head>
+<body>
+
+<div class="pos-shell">
+
+  <!-- ============= Header ============= -->
+  <header class="site-header pos-header">
+    <a href="/" class="brand-logo">
+      <img src="/img/LOGO.png" alt="食在好蔬" class="logo-img">
+      <div class="logo-text-wrap">
+        <span class="logo-text">食在好蔬</span>
+        <span class="logo-sub">Good Veggie</span>
+      </div>
+    </a>
+    <div class="spacer"></div>
+    <div class="meta">
+      <span class="date" id="today-label"></span>
+
+      {% if liff_id %}
+      <!-- LINE 登入區（依狀態切換顯示） -->
+      <div class="line-account" id="line-account">
+        <!-- 未登入 -->
+        <button class="line-login-btn" id="line-login-btn" type="button" hidden>
+          <img src="/img/line.png" alt="" class="line-login-ico" aria-hidden="true">
+          <span>用 LINE 登入</span>
+        </button>
+
+        <!-- 已登入：只顯示頭像（點開有下拉可登出） -->
+        <button class="line-account-btn" id="line-account-btn" type="button" hidden aria-expanded="false" title="LINE 帳號">
+          <img class="line-avatar" id="line-avatar" alt="LINE 頭像" src="">
+        </button>
+        <!-- 下拉選單 -->
+        <div class="line-dropdown" id="line-dropdown" hidden>
+          <div class="line-dd-info">
+            <div class="line-dd-name" id="line-dd-name">—</div>
+            <div class="line-dd-phone" id="line-dd-phone">尚未綁定電話</div>
+          </div>
+          <hr class="line-dd-sep">
+          <button class="line-dd-logout" id="line-logout-btn" type="button">登出 LINE</button>
+        </div>
+      </div>
+      <!-- 我的訂單按鈕（移到 .line-account 外面、跟它平行，這樣才會吃到 .meta 的 gap）-->
+      <button class="my-orders-btn" id="my-orders-btn" type="button" hidden title="查看我的訂單">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+          <rect x="9" y="3" width="6" height="4" rx="1"/>
+          <path d="M9 12h6M9 16h4"/>
+        </svg>
+        <span>我的訂單</span>
+        <!-- 紅色徽章：有「待付款 + 待出貨」訂單時顯示，0 時隱藏 -->
+        <span class="my-orders-badge" id="my-orders-badge" hidden>0</span>
+      </button>
+      {% endif %}
+
+    </div>
+  </header>
+
+  <!-- ============= Main：只專心組裝商品 ============= -->
+  <main class="pos-main">
+
+    <section class="builder">
+
+      <!-- 01 一般萵苣 -->
+      <div class="section first">
+        <div class="heading">
+          <span class="num">01</span>
+          <span class="title">一般水耕萵苣</span>
+          <span class="hint">組合包 NT$200 · 自選偏好 NT$250 · 一包約 400 克 · 一包最多選 3 項</span>
+        </div>
+
+        <!-- 組合包（不選）置頂橫條 -->
+        <label class="combo-banner" id="combo-banner">
+          <input type="checkbox" id="combo-check">
+          <span class="combo-box"></span>
+          <div class="combo-text">
+            <div class="combo-title">組合包</div>
+            <div class="combo-sub">完全交由農場當日採收隨機搭配</div>
+          </div>
+          <div class="combo-cta">勾選此項</div>
+        </label>
+
+        <div class="veggie-grid" id="std-grid"></div>
+      </div>
+
+      <!-- 02 特殊品項 -->
+      <div class="section">
+        <div class="heading">
+          <span class="num">02</span>
+          <span class="title">特殊品項</span>
+          <span class="hint">現場秤重，另外加價</span>
+        </div>
+        <div id="spec-list"></div>
+      </div>
+
+      <!-- 食用前提醒 -->
+      <aside class="farm-notice" role="note" aria-label="食用前提醒">
+        <svg class="farm-notice-ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2a7 7 0 0 1 7 7c0 4-3.5 7.5-7 13-3.5-5.5-7-9-7-13a7 7 0 0 1 7-7z"/>
+          <path d="M12 6c2.5 0 4 1.8 4 4-2 .3-3.4 1.3-4 3-0.6-1.7-2-2.7-4-3 0-2.2 1.5-4 4-4z"/>
+        </svg>
+        <div class="farm-notice-body">
+          <span class="farm-notice-title">食用前提醒</span>
+          <p>由於本農場採取自然農法，<strong>食用前請務必清洗乾淨</strong>後再食用。</p>
+        </div>
+      </aside>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- ============= 懸浮：數量 + 加入購物車（固定畫面底部中央）============= -->
+<div class="pack-action-bar" id="pack-action-bar">
+  <button class="pab-cart" id="pab-cart-btn" type="button" aria-label="查看購物車">
+    <svg class="pab-cart-ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+    </svg>
+    <span class="pab-cart-badge zero" id="pab-cart-badge">0</span>
+  </button>
+  <span class="pab-label">數量</span>
+  <div class="qty-stepper pab-qty">
+    <button type="button" id="qty-minus" aria-label="減少">−</button>
+    <input type="number" class="val" id="qty-val" value="1" min="1" max="99" inputmode="numeric" aria-label="數量">
+    <button type="button" id="qty-plus" aria-label="增加">+</button>
+  </div>
+  <button class="add-cart-btn" id="add-cart-btn" type="button">
+    <span>加入購物車</span>
+    <span class="price"><span class="ccy">NT$</span><span id="add-cart-price">200</span></span>
+  </button>
+</div>
+
+<!-- ============= 回到頂部 FAB（放在右下、購物車鈕上方）============= -->
+<button class="back-to-top" id="back-to-top" type="button" aria-label="回到頂部">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5"/>
+    <path d="M5 12l7-7 7 7"/>
+  </svg>
+</button>
+
+<!-- ============= 購物車抽屜（兩步驟：購物車 → 結帳） ============= -->
+<div class="drawer-backdrop" id="cart-drawer">
+  <aside class="drawer" role="dialog" aria-modal="true" aria-label="購物車">
+    <div class="drawer-viewport">
+      <div class="drawer-track" id="drawer-track">
+
+        <!-- 第一層：購物車 -->
+        <section class="drawer-step">
+          <header class="drawer-head">
+            <h2>購物車</h2>
+            <span class="drawer-sub" id="cart-count">尚未加入任何一包</span>
+            <button class="drawer-close" data-close-drawer type="button" aria-label="關閉">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </header>
+          <div class="drawer-body">
+            <div class="cart-list" id="cart-list">
+              <div class="cart-empty">尚未加入任何組合包<br>關掉這裡，從畫面組裝你的第一包</div>
+            </div>
+          </div>
+          <footer class="drawer-foot">
+            <div class="total-block">
+              <div class="row"><span>包數</span><span class="tabular" id="total-qty">0 包</span></div>
+              <div class="row grand">
+                <span class="label">總計</span>
+                <span class="value"><span class="ccy">NT$</span><span id="grand-total">0</span></span>
+              </div>
+            </div>
+            <button class="checkout-btn" id="to-checkout-btn" disabled type="button">
+              <span class="label">前往結帳</span>
+              <span class="amount"><span class="ccy">NT$</span><span id="checkout-amount">0</span> <span class="arrow">→</span></span>
+            </button>
+          </footer>
+        </section>
+
+        <!-- 第二層：結帳（填取件資訊） -->
+        <section class="drawer-step">
+          <header class="drawer-head">
+            <button class="drawer-back" id="back-to-cart" type="button" aria-label="返回購物車">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <h2>填寫取件資訊</h2>
+            <button class="drawer-close" data-close-drawer type="button" aria-label="關閉">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </header>
+          <div class="drawer-body">
+            <div class="customer-block">
+              <div class="field-grid">
+                <div class="field-group-h">
+                  <label for="cust-name">取件人姓名</label>
+                  <input type="text" id="cust-name" autocomplete="off">
+                </div>
+                <div class="field-group-h">
+                  <label for="cust-phone">聯絡電話</label>
+                  <input type="tel" id="cust-phone" maxlength="10" autocomplete="off" placeholder="09xx-xxx-xxx">
+                </div>
+                <div class="field-group-h full">
+                  <label>取貨地點</label>
+                  <div class="pickup-choice" id="pickup-choice">
+                    <label class="pickup-opt">
+                      <input type="radio" name="pickup-location" value="tamsui">
+                      <span class="pickup-box">
+                        <span class="pickup-name">淡水廠</span>
+                        <span class="pickup-spot">2 樓大廳</span>
+                      </span>
+                    </label>
+                    <label class="pickup-opt">
+                      <input type="radio" name="pickup-location" value="qiyan">
+                      <span class="pickup-box">
+                        <span class="pickup-name">奇岩廠</span>
+                        <span class="pickup-spot">1 樓大廳</span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <div class="field-group-h full">
+                  <label for="order-remarks">整單備註（選填）</label>
+                  <input type="text" id="order-remarks" placeholder="如：不要太晚通知">
+                </div>
+              </div>
+            </div>
+            <!-- 結帳前的訂單預覽 -->
+            <div class="checkout-recap" id="checkout-recap"></div>
+          </div>
+          <footer class="drawer-foot">
+            <div class="total-block mini">
+              <div class="row grand">
+                <span class="label">應付總計</span>
+                <span class="value"><span class="ccy">NT$</span><span id="grand-total-2">0</span></span>
+              </div>
+            </div>
+            <button class="checkout-btn" id="checkout-btn" disabled type="button">
+              <span class="label">送出訂單</span>
+              <span class="amount"><span class="ccy">NT$</span><span id="checkout-amount-2">0</span> <span class="arrow">→</span></span>
+            </button>
+          </footer>
+        </section>
+
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ============= 我的訂單抽屜（登入後可看：待出貨 / 已完成）============= -->
+<div class="drawer-backdrop" id="orders-drawer">
+  <aside class="drawer" role="dialog" aria-modal="true" aria-label="我的訂單">
+    <header class="drawer-head">
+      <h2>我的訂單</h2>
+      <span class="drawer-sub" id="orders-drawer-sub">查看待出貨與已完成的訂單</span>
+      <button class="drawer-close" data-close-drawer type="button" aria-label="關閉">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </header>
+    <!-- 分頁切換 -->
+    <div class="orders-tabs">
+      <button class="orders-tab active" data-tab="preparing" type="button">
+        準備中 <span class="orders-tab-count" id="tab-count-preparing">0</span>
+      </button>
+      <button class="orders-tab" data-tab="done" type="button">
+        已完成 <span class="orders-tab-count" id="tab-count-done">0</span>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <!-- 準備中清單（訂單成立、尚未取貨）-->
+      <div class="orders-pane active" id="orders-pane-preparing">
+        <div class="orders-list" id="preparing-list">
+          <div class="pending-empty">目前沒有準備中的訂單</div>
+        </div>
+      </div>
+      <!-- 已完成清單（已取貨 / 已取消 / 已退貨）-->
+      <div class="orders-pane" id="orders-pane-done" hidden>
+        <div class="orders-list" id="done-list">
+          <div class="pending-empty">最近 60 天沒有已完成的訂單</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ============= 「下單需登入 LINE」提示 modal ============= -->
+<div class="modal-backdrop" id="login-required-modal">
+  <div class="modal login-required-box">
+    <img src="/img/line.png" alt="" class="lr-icon" aria-hidden="true">
+    <span class="eyebrow">LINE Login Required</span>
+    <h3 class="lr-title">下單前請先用 LINE 登入</h3>
+    <p class="lr-body">
+      為了能在<strong>付款確認</strong>與<strong>到貨</strong>時即時通知您，
+      我們需要您透過 LINE 登入再下單。<br><br>
+      登入後您的姓名會自動帶入，下次也不用重新輸入電話。
+    </p>
+    <div class="actions">
+      <button class="btn btn-ghost" id="lr-cancel-btn" type="button">先繼續逛</button>
+      <button class="btn btn-primary lr-login-btn" id="lr-login-btn" type="button">
+        <img src="/img/line.png" alt="" aria-hidden="true">
+        <span>用 LINE 登入</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast 通知 -->
+<div id="toast-stack"></div>
+
+<!-- 結帳成功：訂單成立確認 modal（取貨付現） -->
+<div class="modal-backdrop" id="success-modal">
+  <div class="modal order-ok-modal">
+    <div class="order-ok-icon">
+      <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/>
+      </svg>
+    </div>
+    <h3 class="order-ok-title">訂單已成立</h3>
+
+    <!-- 訂單摘要 -->
+    <div class="pay-summary">
+      <div class="pay-row">
+        <span class="lbl">訂單編號</span>
+        <strong id="pay-order-id" class="mono">—</strong>
+      </div>
+      <div class="pay-row">
+        <span class="lbl">取件人</span>
+        <strong id="pay-name">—</strong>
+      </div>
+      <div class="pay-row">
+        <span class="lbl">取貨地點</span>
+        <strong id="pay-pickup">—</strong>
+      </div>
+      <div class="pay-row big">
+        <span class="lbl">取貨付現</span>
+        <strong class="pay-amount"><span class="ccy">NT$</span><span id="pay-amount">0</span></strong>
+      </div>
+    </div>
+
+    <p class="order-ok-note">
+      我們會在<strong>確認庫存後</strong>以 LINE 通知您取貨。<br>
+      取貨時請帶現金 <strong>NT$ <span id="pay-amount-2">0</span></strong>。
+    </p>
+
+    <div class="actions">
+      <button class="btn btn-primary btn-block" id="order-ok-btn" type="button">我知道了</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// LIFF / CSRF 注入
+window.__LIFF_ID__ = {{ liff_id | tojson }};
+window.__CSRF__    = {{ csrf_token | tojson }};
+
+// 萵苣資料；「組合包（不選）」獨立放在置頂橫條
+window.__VEG_DATA__ = {
+  standard: [
+    { name: "紅奶油萵苣",   photo: "/img/menu/red-butter-1.jpg" },
+    { name: "綠奶油萵苣",   photo: "/img/menu/green-butter-1.jpg" },
+    { name: "紅橡木萵苣",   photo: "/img/menu/red-oak-1.jpg" },
+    { name: "綠橡木萵苣",   photo: "/img/menu/green-oak-1.jpg" },
+    { name: "紅火焰萵苣",   photo: "/img/menu/red-flame-1.jpg" },
+    { name: "綠火焰萵苣",   photo: "/img/menu/green-flame-1.jpg" },
+    { name: "蘿蔓萵苣",     photo: "/img/menu/romaine-1.jpg" },
+    { name: "甜蘿蔓萵苣",   photo: "/img/menu/sweet-romaine-1.jpg" },
+    { name: "皺葉萵苣",     photo: "/img/menu/frilly-1.jpg" },
+    { name: "甜脆萵苣",     photo: "/img/menu/sweet-crisp-1.jpg" }
+  ],
+  special: [
+    { name: "羽衣甘藍", photo: "/img/menu/kale-1.jpg" },
+    { name: "芝麻葉",   photo: "/img/menu/arugula-1.jpg" }
+  ]
+};
+</script>
+<script src="{{ url_for('static', filename='js/pos.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>合作農場 · 食在好蔬</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+<div class="admin-shell">
+
+  <header class="site-header admin-header">
+    <a href="{{ url_for('admin_page') }}" class="brand-logo">
+      <img src="/img/LOGO.png" alt="食在好蔬" class="logo-img">
+      <div class="logo-text-wrap">
+        <span class="logo-text">食在好蔬</span>
+        <span class="logo-sub">Good Veggie</span>
+      </div>
+    </a>
+    <div class="spacer"></div>
+    <div class="meta">
+      <a href="{{ url_for('admin_page') }}" class="redeem-link" title="回到訂單後台">← 返回訂單</a>
+      <a href="{{ url_for('admin_products_page') }}" class="redeem-link" title="管理商品">商品管理</a>
+      <span class="user">Hi, {{ user }}</span>
+      <span class="timer" id="idle-timer" title="閒置自動登出倒數">--:--</span>
+      <button class="logout" id="logout-btn">登出</button>
+    </div>
+  </header>
+
+  <main class="prod-main">
+    <div class="prod-head">
+      <div class="title-block">
+        <span class="eyebrow">Farms · 合作農場</span>
+        <h1>合作農場</h1>
+        <p class="prod-intro">在這裡新增或編輯合作農場。<strong>上架中</strong>的農場會出現在前台「合作農場」頁；農場的商品請到<a href="{{ url_for('admin_products_page') }}">商品管理</a>新增，類型選「合作農場商品」。農場下架時，它的商品也會一起從前台隱藏。</p>
+      </div>
+      <button class="btn btn-primary" id="farm-add-btn" type="button">＋ 新增農場</button>
+    </div>
+    <div class="prod-grid" id="farm-grid"><div class="prod-empty">載入中…</div></div>
+  </main>
+</div>
+
+<div class="modal-backdrop prod-modal-backdrop" id="farm-modal">
+  <div class="modal prod-modal" role="dialog" aria-modal="true" aria-labelledby="farm-modal-title">
+    <span class="eyebrow" id="farm-modal-eyebrow">Edit Farm</span>
+    <h3 id="farm-modal-title">編輯農場</h3>
+
+    <form id="farm-form" autocomplete="off">
+      <input type="hidden" id="g-id">
+
+      <div class="f-block">
+        <label class="f-label">農場照片（最多 2 張）</label>
+        <p class="f-hint">第 1 張是封面（建議橫式 4:3），第 2 張放在農場介紹旁。JPG／PNG、單張 ≤ 3MB，系統會自動壓縮。請使用你有權使用的照片。</p>
+        <div class="f-imgs">
+          <button type="button" class="f-imgslot" data-slot="1" id="g-imgslot-1">
+            <img class="f-img-preview" id="g-img-1" alt="">
+            <span class="f-img-placeholder" id="g-imgph-1">＋ 封面照</span>
+            <span class="f-img-edit">更換</span>
+          </button>
+          <button type="button" class="f-imgslot" data-slot="2" id="g-imgslot-2">
+            <img class="f-img-preview" id="g-img-2" alt="">
+            <span class="f-img-placeholder" id="g-imgph-2">＋ 照片 2</span>
+            <span class="f-img-edit">更換</span>
+          </button>
+        </div>
+        <input type="file" id="g-img-input" accept="image/jpeg,image/png,image/webp" hidden>
+        <p class="f-imgnote" id="g-imgnote">新農場請先按「儲存」建立後，再上傳照片。</p>
+      </div>
+
+      <div class="f-row">
+        <div class="f-block">
+          <label class="f-label" for="g-name">農場名稱 <span class="req">*</span></label>
+          <input type="text" id="g-name" class="f-input" maxlength="100" placeholder="例：添丁養生黑木耳">
+        </div>
+        <div class="f-block">
+          <label class="f-label" for="g-region">地區</label>
+          <input type="text" id="g-region" class="f-input" maxlength="50" placeholder="例：桃園大溪">
+        </div>
+      </div>
+
+      <div class="f-block">
+        <label class="f-label" for="g-summary">一句話介紹（卡片上顯示，300 字內）</label>
+        <textarea id="g-summary" class="f-input f-area" rows="2" maxlength="300" placeholder="他們種什麼、怎麼種，最打動你的一點。"></textarea>
+      </div>
+      <div class="f-block">
+        <label class="f-label" for="g-story">農場故事（農場頁顯示，可分段）</label>
+        <textarea id="g-story" class="f-input f-area" rows="5" maxlength="5000" placeholder="誰在種、為什麼這樣種、你去拜訪時看到什麼。"></textarea>
+      </div>
+
+      <div class="f-row">
+        <div class="f-block">
+          <label class="f-label" for="g-crops">種什麼</label>
+          <input type="text" id="g-crops" class="f-input" maxlength="300" placeholder="香菇、黑木耳、猴頭菇">
+        </div>
+        <div class="f-block">
+          <label class="f-label" for="g-cert">認證 / 榮譽</label>
+          <input type="text" id="g-cert" class="f-input" maxlength="200" placeholder="例：有機驗證（請填實際有的）">
+        </div>
+      </div>
+
+      <div class="f-row">
+        <div class="f-block">
+          <label class="f-label" for="g-website">農場網站（選填）</label>
+          <input type="text" id="g-website" class="f-input" maxlength="255" placeholder="https://">
+        </div>
+        <div class="f-block">
+          <label class="f-label" for="g-sort">排序（數字越小越前面）</label>
+          <input type="number" id="g-sort" class="f-input" min="0" max="9999" step="1" placeholder="0">
+        </div>
+      </div>
+
+      <label class="f-toggle">
+        <input type="checkbox" id="g-active" checked>
+        <span class="f-toggle-track"><span class="f-toggle-thumb"></span></span>
+        <span class="f-toggle-label">上架中（取消勾選 → 前台隱藏這家農場和它的商品）</span>
+      </label>
+
+      <div class="prod-modal-actions">
+        <button type="button" class="btn btn-ghost" id="farm-cancel">取消</button>
+        <button type="submit" class="btn btn-primary" id="farm-save">儲存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="confirm-modal">
+  <div class="modal">
+    <span class="eyebrow">Confirm</span>
+    <h3 id="confirm-title">確定執行此操作？</h3>
+    <p id="confirm-body" class="muted" style="margin-top: 8px;"></p>
+    <div class="actions">
+      <button class="btn btn-ghost" id="confirm-cancel">取消</button>
+      <button class="btn btn-danger" id="confirm-ok">確定</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-stack"></div>
+
+<script>
+  window.__IDLE_MIN__ = {{ idle_timeout_min }};
+  window.__CSRF__ = {{ csrf_token | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/admin_farms.js') }}"></script>
+</body>
+</html>

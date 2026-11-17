@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理後台 · 食在好蔬</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+<div class="admin-shell">
+
+  <header class="site-header admin-header">
+    <a href="{{ url_for('admin_page') }}" class="brand-logo">
+      <img src="/img/LOGO.png" alt="食在好蔬" class="logo-img">
+      <div class="logo-text-wrap">
+        <span class="logo-text">食在好蔬</span>
+        <span class="logo-sub">Good Veggie</span>
+      </div>
+    </a>
+    <div class="spacer"></div>
+    <div class="meta">
+      <a href="{{ url_for('admin_products_page') }}" class="redeem-link" title="管理上架商品種類 / 圖片 / 描述">🥬 商品管理</a>
+      <a href="{{ url_for('redeem_page') }}" class="redeem-link" title="掃顧客 QR 確認取貨">📷 掃碼核銷</a>
+      <span class="user">Hi, {{ user }}</span>
+      <span class="timer" id="idle-timer" title="閒置自動登出倒數">--:--</span>
+      <button class="logout" id="logout-btn">登出</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+
+    <!-- ===== 側邊：出貨日期（週視圖 + 日曆選擇器） ===== -->
+    <aside class="sidebar">
+      <h3>依出貨日篩選</h3>
+
+      <!-- 週導覽列 -->
+      <div class="week-nav">
+        <button class="wk-btn" id="wk-prev-month" type="button" title="上個月" aria-label="上個月">«</button>
+        <button class="wk-btn" id="wk-prev-week"  type="button" title="上一週" aria-label="上一週">‹</button>
+        <button class="wk-label" id="wk-label" type="button" title="點此選擇其他日期">
+          <span id="wk-range">—</span>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </button>
+        <!-- 隱藏的 date input，被 wk-label 觸發 -->
+        <input type="date" id="wk-date-input" class="wk-hidden-date" aria-hidden="true">
+        <button class="wk-btn" id="wk-next-week"  type="button" title="下一週" aria-label="下一週">›</button>
+        <button class="wk-btn" id="wk-next-month" type="button" title="下個月" aria-label="下個月">»</button>
+      </div>
+
+      <button class="wk-today-btn" id="wk-today" type="button">← 回到本週</button>
+
+      <p class="sidebar-hint">點任一日期 → 只看那天的訂單。要批次通知／取貨時，只會操作右側顯示的範圍。</p>
+      <div class="date-list" id="date-list">
+        <div style="padding: 20px 0; color: var(--ink-soft); font-style: italic; font-size: 13px;">載入中…</div>
+      </div>
+
+      <div class="pickup-filter">
+        <h3>依取貨地點篩選</h3>
+        <div class="pickup-filter-btns">
+          <button class="pickup-btn active" data-pickup="" type="button">全部</button>
+          <button class="pickup-btn" data-pickup="tamsui" type="button">淡水廠</button>
+          <button class="pickup-btn" data-pickup="qiyan" type="button">奇岩廠</button>
+        </div>
+      </div>
+
+      <div class="footer-toggle">
+        <label class="check">
+          <input type="checkbox" id="show-closed">
+          <span class="box"></span>
+          <span>顯示已結案訂單</span>
+        </label>
+        <label class="check" style="margin-top:8px;">
+          <input type="checkbox" id="show-voided">
+          <span class="box"></span>
+          <span>顯示已取消 / 退貨</span>
+        </label>
+        <p class="sidebar-hint" style="margin-top:10px;">預設只看「未結案」的正常訂單，讓你專注在今天要處理的事。</p>
+      </div>
+    </aside>
+
+    <!-- ===== 主區：訂單表格 ===== -->
+    <section class="main-area">
+
+      <!-- 行動裝置：開啟側邊欄按鈕 -->
+      <button class="mobile-sidebar-toggle" id="mobile-sidebar-toggle" type="button">
+        <span>選擇出貨日</span>
+        <span class="chev">▾</span>
+      </button>
+
+      <div class="main-head">
+        <div class="title-block">
+          <span class="eyebrow">Orders · 訂單明細</span>
+          <h1 id="filter-title">全部訂單 <span class="sub" id="filter-sub">— All</span></h1>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="lbl">總筆數</div>
+            <div class="val" id="stat-total">—</div>
+          </div>
+          <div class="stat">
+            <div class="lbl">待通知</div>
+            <div class="val" id="stat-unnotified" style="color: var(--ochre);">—</div>
+          </div>
+          <div class="stat">
+            <div class="lbl">待取貨</div>
+            <div class="val" id="stat-unpicked" style="color: var(--forest);">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 訂單搜尋（姓名 / 電話 / 訂單編號，跨所有日期）-->
+      <div class="order-search-bar">
+        <div class="order-search">
+          <svg class="order-search-icon" viewBox="0 0 24 24" width="17" height="17" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input type="text" id="order-search" class="order-search-input"
+                 placeholder="搜尋姓名 · 電話 · 訂單編號"
+                 autocomplete="off" maxlength="30" inputmode="search">
+          <button type="button" id="order-search-clear" class="order-search-clear" hidden aria-label="清除搜尋">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+                 stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 收款狀態篩選 -->
+      <div class="pay-filter-bar">
+        <span class="label">收款狀態</span>
+        <div class="pay-tabs">
+          <button class="pay-tab active" data-pay="" type="button">全部</button>
+          <button class="pay-tab" data-pay="pending" type="button">
+            待收款 <span class="pay-badge zero" id="pay-pending-badge">0</span>
+          </button>
+          <button class="pay-tab" data-pay="paid" type="button">已收款</button>
+        </div>
+        <span class="pay-hint" id="pay-hint"></span>
+      </div>
+
+      <!-- 批次操作工具列 -->
+      <div class="bulk-bar">
+        <span class="label">批次操作</span>
+        <span class="sep">│</span>
+        <span class="bulk-hint">先勾選訂單 →</span>
+        <button class="btn btn-ghost btn-sm" id="sel-all" title="勾選表格中所有未結案的訂單">全選此頁</button>
+        <button class="btn btn-ghost btn-sm" id="sel-unnotified" title="勾選所有還沒推播過 LINE 的訂單">未通知</button>
+        <button class="btn btn-ghost btn-sm" id="sel-unpicked" title="勾選所有還沒取貨的訂單">未取貨</button>
+        <button class="btn btn-ghost btn-sm" id="sel-clear">清除勾選</button>
+        <span class="sep">│</span>
+        <button class="btn btn-primary btn-sm" id="bulk-notify" title="對所選訂單一次性發送 LINE 到貨通知">推播 LINE 通知</button>
+        <button class="btn btn-accent btn-sm" id="bulk-pickup" title="對所選訂單一次標記為已取貨／結案">確認已取貨</button>
+        <span class="count-chip" id="sel-count">未選</span>
+        <span class="sep">│</span>
+        <button class="btn btn-ghost btn-sm" id="export-shipping-btn" title="把目前所選日期的訂單匯出成 Word 出貨單">📄 匯出出貨單</button>
+      </div>
+
+      <div id="table-wrap">
+        <table class="order-table" id="order-table">
+          <thead>
+            <tr>
+              <th class="center" style="width: 36px;">
+                <label class="check" style="margin: 0; justify-content: center;">
+                  <input type="checkbox" id="head-check">
+                  <span class="box"></span>
+                </label>
+              </th>
+              <th>編號 / 時間</th>
+              <th>顧客</th>
+              <th class="center">數量</th>
+              <th class="right">金額</th>
+              <th>出貨日</th>
+              <th>取貨地點</th>
+              <th>備註</th>
+              <th>收款</th>
+              <th class="center">狀態</th>
+              <th class="right">操作</th>
+            </tr>
+          </thead>
+          <tbody id="order-tbody">
+            <tr><td colspan="11" style="text-align: center; padding: 40px; color: var(--ink-soft); font-style: italic;">載入中…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<div id="toast-stack"></div>
+
+<!-- 確認 modal -->
+<div class="modal-backdrop" id="confirm-modal">
+  <div class="modal">
+    <span class="eyebrow">Confirm</span>
+    <h3 id="confirm-title">確定執行此操作？</h3>
+    <p id="confirm-body" class="muted" style="font-family:var(--font-serif); font-style:italic; margin-top: 8px;"></p>
+    <div class="actions">
+      <button class="btn btn-ghost" id="confirm-cancel">取消</button>
+      <button class="btn btn-primary" id="confirm-ok">確定</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.__IDLE_MIN__ = {{ idle_timeout_min }};
+  window.__CSRF__ = {{ csrf_token | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+{% extends 'store/base.html' %}
+{% from 'store/_macros.html' import product_card, photo, stock_tag, source_chip, farm_cover %}
+{% set price = pick_price if product.kind == 'standard' else product.price %}
+{% set unit = '包' if product.kind == 'standard' else product.unit %}
+{% block title %}{{ product.name }}｜{{ farm.name if farm else '食在好蔬 北投農場' }}｜食在好蔬{% endblock %}
+{% block description %}{{ product.description or (product.name ~ '，NT$' ~ price ~ ' / ' ~ unit) }}{% endblock %}
+{% block og_image %}{% if product.photos %}{{ request.url_root.rstrip('/') }}{{ product.photos[0] }}{% else %}{{ super() }}{% endif %}{% endblock %}
+{% block head %}
+<script type="application/ld+json">{{ {
+  '@context': 'https://schema.org', '@type': 'Product', 'name': product.name,
+  'description': product.description, 'image': [request.url_root.rstrip('/') ~ (product.photos[0] if product.photos else '/img/LOGO.png')],
+  'brand': {'@type': 'Brand', 'name': farm.name if farm else '食在好蔬'},
+  'offers': {'@type': 'Offer', 'priceCurrency': 'TWD', 'price': price,
+             'availability': 'https://schema.org/InStock' if product.is_available else 'https://schema.org/OutOfStock'}
+} | tojson }}</script>
+{% endblock %}
+{% block main %}
+<div class="wrap">
+  <nav class="crumbs" aria-label="麵包屑"><ol>
+    <li><a href="/">首頁</a></li>
+    {% if farm %}<li><a href="/farms/{{ farm.id }}">{{ farm.name }}</a></li>{% else %}<li><a href="/shop?src=own">北投自家</a></li>{% endif %}
+    <li aria-current="page">{{ product.name }}</li>
+  </ol></nav>
+
+  <div class="pdp">
+    <div class="gallery-main" data-gallery>
+      <div class="gallery-stage">{{ photo(product.photos[0] if product.photos else '', product.name, 'main-img', eager=True) }}</div>
+      {% if product.photos | length > 1 %}
+      <div class="thumbs" role="group" aria-label="切換照片">
+        {% for ph in product.photos %}
+        <button type="button" data-img="{{ ph }}" aria-pressed="{{ 'true' if loop.first else 'false' }}" aria-label="第 {{ loop.index }} 張照片"><img src="{{ ph }}" alt=""></button>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="buybox">
+      <div class="pcard-meta">{{ source_chip(product, farm_by_id) }}{{ stock_tag(product, None) }}</div>
+      <h1>{{ product.name }}</h1>
+      {% if product.name_en %}<p class="en">{{ product.name_en }}</p>{% endif %}
+      {% if product.description %}<p class="buy-desc">{{ product.description }}</p>{% endif %}
+      <p class="buy-price">NT${{ price }}<span>/ {{ unit }}</span></p>
+      {% if product.kind == 'standard' %}
+      <p class="buy-note">指定品種包，每包約 400 公克。想省一點？<a href="/pack">農場搭配包 NT${{ combo_price }}</a>，品種由農場搭配。</p>
+      {% endif %}
+
+      {% if product.is_available %}
+      <div class="buy-row" id="buy-row">
+        <div class="qty" data-qty>
+          <button type="button" data-step="-1" aria-label="減少數量">−</button>
+          <input type="text" inputmode="numeric" value="1" aria-label="數量" data-qty-input>
+          <button type="button" data-step="1" aria-label="增加數量">＋</button>
+        </div>
+        <button type="button" class="btn btn-lg buy-btn" data-buy
+                data-key="{{ 'pack:' ~ product.name if product.kind == 'standard' else 'item:' ~ product.id }}"
+                data-label="{{ product.name }}" data-price="{{ price }}">加入購物車<span class="buy-sum">NT${{ price }}</span></button>
+      </div>
+      {% else %}
+      <p class="buy-out">這週暫無供應。<a href="https://lin.ee/PJHXHVrQ" rel="noopener" target="_blank">加 LINE 好友</a>，恢復供應時通知你。</p>
+      {% endif %}
+
+      <dl class="facts">
+        {% if product.kind != 'farm' %}<div><dt>種法</dt><dd>魚菜共生水耕，不用農藥和化肥</dd></div>{% elif farm and farm.certification %}<div><dt>認證</dt><dd>{{ farm.certification }}</dd></div>{% endif %}
+        <div><dt>取貨</dt><dd>確認庫存後 LINE 通知，到 {% for k, v in pickup_locations.items() %}{{ v.label | replace('　', ' ') }}{% if not loop.last %} 或 {% endif %}{% endfor %} 取貨</dd></div>
+        <div><dt>付款</dt><dd>取貨時付款，下單不會先扣款</dd></div>
+        {% if product.kind != 'farm' %}<div><dt>保存</dt><dd>連根裝袋冷藏，約 7 到 10 天</dd></div>{% endif %}
+      </dl>
+    </div>
+  </div>
+
+  {% set sections = [('特色', product.features), ('營養成分', product.nutrition), ('怎麼吃', product.eating), ('適合搭配', product.pairing)] %}
+  {% if sections | selectattr(1) | list %}
+  <div class="info-cols">
+    {% for title, body in sections if body %}
+    <section><h2>{{ title }}</h2><p>{{ body }}</p></section>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if farm %}
+  <a class="farm-strip" href="/farms/{{ farm.id }}">
+    {{ farm_cover(farm) }}
+    <div><p class="where">{{ farm.region }}</p><h2>{{ farm.name }}</h2><p>{{ farm.summary }}</p><span class="text-link">認識這家農場</span></div>
+  </a>
+  {% endif %}
+
+  {% if related %}
+  <section class="sec-tight" aria-labelledby="rel-h">
+    <h2 id="rel-h">{{ '同一家農場的其他商品' if farm else '也看看' }}</h2>
+    <div class="grid grid-4">
+      {% for p in related %}{{ product_card(p, farm_by_id, pick_price, loop.index) }}{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+
+{% if product.is_available %}
+<div class="sticky-buy" id="sticky-buy" hidden>
+  <div><strong>{{ product.name }}</strong><span>NT${{ price }} / {{ unit }}</span></div>
+  <button type="button" class="btn" data-sticky-buy>加入購物車</button>
+</div>
+{% endif %}
+{% endblock %}

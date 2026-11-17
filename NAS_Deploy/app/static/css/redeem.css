@@ -1,0 +1,220 @@
+/* ==================== 掃碼核銷頁 ==================== */
+.redeem-main {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 18px 64px;
+}
+
+.rdm-title {
+  font-size: 1.6rem;
+  color: var(--forest-deep);
+  margin: 4px 0 6px;
+}
+.rdm-sub {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.rdm-backlink {
+  font-size: 0.85rem;
+  color: var(--moss);
+  text-decoration: none;
+  margin-right: 14px;
+}
+.rdm-backlink:hover { color: var(--forest); text-decoration: underline; }
+
+/* 掃描卡 */
+.rdm-scanner {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.rdm-cam-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #11160f;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#cam {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rdm-cam-wrap.idle #cam { display: none; }
+
+/* 掃描對位框 */
+.rdm-frame {
+  position: absolute;
+  inset: 14%;
+  border: 2px solid rgba(255,255,255,0.85);
+  border-radius: 14px;
+  box-shadow: 0 0 0 2000px rgba(0,0,0,0.28);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms var(--ease);
+}
+.rdm-cam-wrap.scanning .rdm-frame { opacity: 1; }
+
+.rdm-cam-hint {
+  position: absolute;
+  color: rgba(255,255,255,0.86);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 0 20px;
+  pointer-events: none;
+}
+.rdm-cam-wrap.scanning .rdm-cam-hint { display: none; }
+
+.rdm-scan-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+.rdm-scan-actions .btn-primary,
+.rdm-scan-actions .btn-ghost { flex: 1; }
+
+.btn-primary {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--forest);
+  color: #fff;
+  cursor: pointer;
+  transition: background 160ms var(--ease);
+}
+.btn-primary:hover { background: var(--forest-deep); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-ghost {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 13px 16px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.btn-ghost:hover { background: var(--paper-soft); }
+
+.rdm-status {
+  font-size: 0.85rem;
+  color: var(--moss);
+  margin: 12px 2px 0;
+  min-height: 1.2em;
+}
+.rdm-status.err { color: var(--tomato); font-weight: 600; }
+
+/* 結果 / 摘要卡 */
+.rdm-result {
+  margin-top: 18px;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.rdm-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+.rdm-banner .ic { font-size: 1.4rem; line-height: 1; }
+.rdm-banner.ok   { background: #e7f0e0; color: var(--forest-deep); }
+.rdm-banner.warn { background: #f7ecd6; color: var(--ochre-deep); }
+.rdm-banner.bad  { background: #f6ddd2; color: var(--tomato); }
+
+.rdm-sum-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--rule);
+  font-size: 0.95rem;
+}
+.rdm-sum-row:last-of-type { border-bottom: none; }
+.rdm-sum-row .k { color: var(--ink-soft); white-space: nowrap; }
+.rdm-sum-row .v { font-weight: 600; text-align: right; }
+.rdm-sum-row .v.amount {
+  font-size: 1.5rem;
+  color: var(--tomato);
+  font-family: var(--font-serif);
+}
+.rdm-sum-row .v.oid { font-family: var(--font-mono); font-size: 0.9rem; }
+
+.rdm-items {
+  margin: 6px 0 0;
+  padding: 10px 12px;
+  background: var(--paper-soft);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.rdm-items .pack { }
+
+.rdm-remark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #f7ecd6;
+  border: 1px solid var(--ochre);
+  border-radius: 10px;
+}
+.rdm-remark-label {
+  flex: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--ochre-deep);
+  padding: 2px 9px;
+  border-radius: 999px;
+}
+.rdm-remark-text {
+  font-weight: 700;
+  color: var(--ochre-deep);
+  font-size: 0.98rem;
+  word-break: break-word;
+}
+
+.rdm-result-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.rdm-result-actions .btn-primary,
+.rdm-result-actions .btn-ghost { flex: 1; }
+.btn-primary.big { font-size: 1.1rem; padding: 15px; }
+
+.pay-chip {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 999px;
+}
+.pay-chip.cash   { background: #e7f0e0; color: var(--forest-deep); }
+.pay-chip.unpaid { background: #f7ecd6; color: var(--ochre-deep); }
