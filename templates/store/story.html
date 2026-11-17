@@ -1,38 +1,29 @@
 {% extends 'store/base.html' %}
-{% block title %}品牌故事｜農友專心種，我們幫忙賣｜食在好蔬{% endblock %}
-{% block description %}食在好蔬幫用心的農友把好菜賣出去。我們自己也是魚菜共生的農友，替自己的菜找到銷路之後，把同一條路打開給更多農友。{% endblock %}
+{% block title %}品牌故事｜從自己種菜，到幫農友賣菜｜食在好蔬{% endblock %}
+{% block description %}食在好蔬從北投的一座魚菜共生農場開始。我們遇過好菜賣不出去的難題，找到出路之後，做了這個市集。{% endblock %}
 {% block main %}
-{# 先講使命（幫農友賣菜），再用章節交代為什麼是我們：起點 → 難題 → 出路 → 分享出去 → 承諾 → 邀請。 #}
+{# 品牌故事只講故事：怎麼開始 → 遇到什麼 → 所以做了這個。給農友的合作說明在 /partner，給消費者的在 /help。 #}
 <div class="wrap">
   <nav class="crumbs" aria-label="麵包屑"><ol><li><a href="/">首頁</a></li><li aria-current="page">品牌故事</li></ol></nav>
   <header class="story-hero">
     <div class="story-hero-copy">
       <p class="eyebrow">品牌故事</p>
-      <h1>農友專心種，<br>我們幫忙賣</h1>
-      <p class="lead">食在好蔬是幫用心的農友把好菜賣出去的市集。我們自己也是種菜的人，替自己的萵苣找到銷路之後，把同一條路打開，讓更多農友一起搭上來。</p>
-      <div class="hero-cta">
-        <a class="btn btn-lg" href="/farms">認識合作農場</a>
-        <a class="btn btn-ghost btn-lg" href="#ch1-h">為什麼是我們</a>
-      </div>
+      <h1>從自己種菜，<br>到幫農友賣菜</h1>
+      <p class="lead">食在好蔬從北投的一座魚菜共生農場開始。這是我們怎麼走到今天的故事。</p>
     </div>
-    <div class="story-collage" aria-label="市集裡的農友與好物">
-      <figure class="sc-a"><span class="logo-cover" style="--logo:url('/img/farms/tianding/logo.png')"><img src="/img/farms/tianding/logo.png" alt="添丁養生黑木耳 標誌"></span><figcaption>添丁・桃園大溪</figcaption></figure>
-      <figure class="sc-b"><img src="/img/site/site-2.jpg" alt="北投農場的紅、綠萵苣"><figcaption>食在好蔬・北投</figcaption></figure>
-      <figure class="sc-c"><img src="/img/farms/tianding/gift-box.jpg" alt="添丁的有機菇禮盒"><figcaption>農友的好物，一起上架</figcaption></figure>
-    </div>
+    <figure class="story-hero-pic"><img src="/img/site/site-3.jpg" alt="北投的魚菜共生農場內部"></figure>
   </header>
 </div>
 
 <div class="wrap story">
-
   <section class="chapter" aria-labelledby="ch1-h">
     <div class="ch-mark"><span class="ch-no">01</span><span class="ch-year">2024–2025</span></div>
     <div class="ch-body">
-      <h2 id="ch1-h">先把菜種好</h2>
+      <h2 id="ch1-h">我們怎麼開始</h2>
       <div class="prose">
         <p>一開始，我們只想知道：在城市裡，能不能不用農藥，也種出天天吃得到的菜？</p>
         <p>我們選了魚菜共生。魚的排泄物經過硝化菌分解，變成萵苣的養分；萵苣把水濾乾淨，再流回魚池。整個循環不用農藥和化學肥料，用水比土耕少約九成。</p>
-        <p>難的是讓它穩定。2024 年，我們開始把物聯網感測器裝進系統，水溫、酸鹼值、溶氧全天記錄；2025 年取得新創補助，在北投蓋了第一座農場。</p>
+        <p>2024 年，我們把物聯網感測器裝進系統，水溫、酸鹼值、溶氧全天記錄；2025 年取得新創補助，在北投蓋了第一座農場。</p>
       </div>
       <figure class="flow">
         <picture>
@@ -40,64 +31,36 @@
           <img src="/img/aquaponics-flow.png" alt="魚菜共生循環：魚的家、硝化菌的家、植物的家，乾淨的水回到魚的家" loading="lazy">
         </picture>
       </figure>
-      <p class="ch-next">菜種出來了，真正的難題才開始。</p>
     </div>
   </section>
 
   <section class="chapter" aria-labelledby="ch2-h">
     <div class="ch-mark"><span class="ch-no">02</span></div>
     <div class="ch-body">
-      <h2 id="ch2-h">好菜種得出來，<br>卻不一定賣得出去</h2>
+      <h2 id="ch2-h">我們遇到的事</h2>
       <div class="prose">
-        <p>萵苣一批批採收，我們卻發現缺少穩定的銷售管道。種得再好，也很難讓更多人吃到。</p>
-        <p>於是我們主動去接觸上市櫃公司，一步步替自己的菜找到穩定的客人，也做了自己的訂購系統，讓客人用 LINE 就能下單。</p>
+        <p>萵苣一批批採收，我們卻發現：好菜種得出來，不一定賣得出去。缺少穩定的銷售管道，種得再好，也很難讓更多人吃到。</p>
+        <p>於是我們主動去接觸上市櫃公司，一步步替自己的菜找到穩定的客人，也做了自己的訂購系統。</p>
+        <p>這段路上我們也做了調查，發現很多農友卡在同一個地方：種得很用心，卻不知道要賣給誰。</p>
       </div>
-      <p class="ch-next">路走通之後我們發現：這條路，不只載得動我們自己的萵苣。</p>
     </div>
   </section>
 
-  <section class="chapter chapter-dark" aria-labelledby="ch3-h">
+  <section class="chapter" aria-labelledby="ch3-h">
     <div class="ch-mark"><span class="ch-no">03</span><span class="ch-year">2026</span></div>
     <div class="ch-body">
-      <h2 id="ch3-h">同一條路，<br>也載得動別人的好菜</h2>
+      <h2 id="ch3-h">所以，我們做了這個市集</h2>
       <div class="prose">
-        <p>我們自己就是農友，知道種得好卻賣不出去有多可惜。很多農友也卡在這裡：種得很用心，卻不知道要賣給誰。</p>
-        <p>既然路已經走通，就讓更多農友一起搭上來。我們把訂購系統打開，做成這個市集：農友專心把菜種好，我們用同一條路，幫忙把菜賣出去。</p>
-        <p>2026 年，第一家合作農場添丁上架。現在，他們的菇和我們的萵苣，放在同一台購物車裡。</p>
+        <p>既然路已經走通，就讓更多農友一起搭上來。2026 年，我們把訂購系統打開，做成這個市集，第一家合作農場添丁也在這裡上架。</p>
+        <p>現在，添丁的菇和我們的萵苣放在同一台購物車裡。下一步，我們計畫擴建第二座農場，也會陸續邀請更多農友加入。</p>
       </div>
-      <ul class="mission-points">
-        <li><b>多一條銷售管道</b><span>農友的商品放上市集，和北投的萵苣一起被看見、一起結帳。</span></li>
-        <li><b>農友專心種就好</b><span>接單、通知、取貨交給我們，農友不用另外經營網路商店。</span></li>
-        <li><b>買的人知道是誰種的</b><span>每家農場都有自己的頁面、故事和驗證資料，買得安心。</span></li>
-      </ul>
+      <figure class="ch-pic"><img src="/img/site/site-6.jpg" alt="北投農場準備採收的萵苣" loading="lazy"></figure>
     </div>
   </section>
 
-  <section class="chapter" aria-labelledby="ch4-h">
-    <div class="ch-mark"><span class="ch-no">04</span></div>
-    <div class="ch-body">
-      <h2 id="ch4-h">我們對你的承諾</h2>
-      <p class="ch-intro">不管是自家的萵苣，還是合作農場的好物，放上市集之前都要過這三關。</p>
-      <div class="beliefs">
-        <div><h3>種法經得起看</h3><p>自家萵苣不用農藥和化肥；合作農場怎麼種，我們都看過。</p></div>
-        <div><h3>親自去過才上架</h3><p>每一家合作農場，我們都去過、看過，也願意買回家吃。</p></div>
-        <div><h3>資料攤開給你看</h3><p>農場故事、驗證證書都放在網站上，誰種的、怎麼種的，一查就知道。</p></div>
-      </div>
-      <p class="ch-next">下一步，我們計畫擴建第二座農場，也會陸續邀請更多農友加入。</p>
-    </div>
-  </section>
-
-  <div class="story-cta">
-    <div>
-      <h2>想吃到用心種的菜？</h2>
-      <p>每一次購買，都在支持種它的人。</p>
-      <div class="hero-cta"><a class="btn btn-lg" href="/shop">逛市集</a><a class="btn btn-ghost btn-lg" href="/farms">認識合作農場</a></div>
-    </div>
-    <div>
-      <h2>你也是用心種植的農友？</h2>
-      <p>你專心種，我們幫忙賣。歡迎來聊聊。</p>
-      <div class="hero-cta"><a class="btn btn-ghost btn-lg" href="mailto:chihaoshu@eatgoodveg.com?subject=%E5%90%88%E4%BD%9C%E8%BE%B2%E5%A0%B4%E6%B4%BD%E8%A9%A2">寫信給我們</a></div>
-    </div>
-  </div>
+  <nav class="story-next" aria-label="接下來">
+    <a href="/shop"><span>逛市集</span><small>看看這週採收的菜</small></a>
+    <a href="/farms"><span>合作農場</span><small>認識一起上架的農友</small></a>
+  </nav>
 </div>
 {% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'store/base.html' %}
+{% from 'store/_macros.html' import farm_cover %}
+{% block title %}合作方式｜農友專心種，我們幫忙賣｜食在好蔬{% endblock %}
+{% block description %}給農友的合作說明：你負責把菜種好，接單、通知、取貨和介紹你的農場，交給食在好蔬。{% endblock %}
+{% block main %}
+<div class="wrap">
+  <nav class="crumbs" aria-label="麵包屑"><ol><li><a href="/">首頁</a></li><li aria-current="page">合作方式</li></ol></nav>
+  <header class="page-hero">
+    <p class="eyebrow">給農友</p>
+    <h1>農友專心種，我們幫忙賣</h1>
+    <p class="lead">你負責把菜種好。接單、通知、取貨，還有把你的農場介紹給消費者，交給我們。</p>
+    <div class="hero-cta">
+      <a class="btn btn-lg" href="mailto:chihaoshu@eatgoodveg.com?subject=%E5%90%88%E4%BD%9C%E8%BE%B2%E5%A0%B4%E6%B4%BD%E8%A9%A2">寫信給我們</a>
+      <a class="btn btn-ghost btn-lg" href="https://lin.ee/PJHXHVrQ" rel="noopener" target="_blank">用 LINE 聊聊</a>
+    </div>
+  </header>
+
+  <section class="block" aria-labelledby="do-h">
+    <h2 id="do-h">我們幫你做的事</h2>
+    <ul class="feature-list">
+      <li><b>多一條銷售管道</b><span>你的商品放上市集，和北投的萵苣一起被看見、一起結帳。</span></li>
+      <li><b>接單、通知、取貨</b><span>消費者用 LINE 下單，我們負責通知和安排取貨，你不用另外經營網路商店。</span></li>
+      <li><b>幫你說故事</b><span>每家農場都有自己的頁面，放上照片、故事和驗證資料，讓消費者知道是誰種的。</span></li>
+    </ul>
+  </section>
+
+  <section class="block" aria-labelledby="flow-h">
+    <h2 id="flow-h">合作流程</h2>
+    <ol class="flow-steps">
+      <li><span>1</span><b>跟我們聯絡</b><p>寫信或用 LINE，簡單介紹你種什麼、在哪裡種。</p></li>
+      <li><span>2</span><b>實地拜訪</b><p>我們親自到農場看看，了解你的種法。</p></li>
+      <li><span>3</span><b>挑商品、談價格</b><p>一起決定上架哪些商品、規格和售價。</p></li>
+      <li><span>4</span><b>上架開賣</b><p>我們幫你建好農場頁和商品頁，開始接單。</p></li>
+    </ol>
+  </section>
+
+  <section class="block" aria-labelledby="rule-h">
+    <h2 id="rule-h">上架的條件</h2>
+    <ul class="check-list">
+      <li>我們親自去過、看過怎麼種。</li>
+      <li>種法經得起看；有驗證資料的話，我們會一起放上農場頁。</li>
+      <li>我們自己也願意買回家吃。</li>
+    </ul>
+  </section>
+
+  {% if farms %}
+  <section class="block" aria-labelledby="now-h">
+    <h2 id="now-h">已經一起上架的農場</h2>
+    <div class="farm-cards">
+      {% for f in farms %}
+      <a class="farm-card" href="/farms/{{ f.id }}">
+        {{ farm_cover(f) }}
+        <div class="farm-card-body"><p class="where">{{ f.region }}</p><h3>{{ f.name }}</h3><p>{{ f.summary }}</p></div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <aside class="cta-box">
+    <h2>想把菜交給我們賣？</h2>
+    <p>先跟我們聊聊你種什麼，我們很想認識你。</p>
+    <div class="hero-cta">
+      <a class="btn btn-lg" href="mailto:chihaoshu@eatgoodveg.com?subject=%E5%90%88%E4%BD%9C%E8%BE%B2%E5%A0%B4%E6%B4%BD%E8%A9%A2">寫信給我們</a>
+      <a class="btn btn-ghost btn-lg" href="https://lin.ee/PJHXHVrQ" rel="noopener" target="_blank">用 LINE 聊聊</a>
+    </div>
+  </aside>
+</div>
+{% endblock %}

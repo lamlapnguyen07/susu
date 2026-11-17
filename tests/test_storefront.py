@@ -112,7 +112,7 @@ class PagesTest(unittest.TestCase):
         app.get_products, app.get_farms = self._p, self._f
 
     def test_pages_render(self):
-        for path in ['/', '/shop', '/p/1', '/p/11', '/p/21', '/pack', '/farms', '/farms/1', '/story', '/help']:
+        for path in ['/', '/shop', '/p/1', '/p/11', '/p/21', '/pack', '/farms', '/farms/1', '/story', '/partner', '/help']:
             r = self.client.get(path)
             self.assertEqual(r.status_code, 200, path)
             self.assertIn('食在好蔬', r.get_data(as_text=True))
@@ -133,7 +133,7 @@ class PagesTest(unittest.TestCase):
     def test_pages_render_without_db(self):
         app.get_products = lambda: []
         app.get_farms = lambda include_inactive=False: []
-        for path in ['/', '/shop', '/farms', '/story', '/help', '/pack']:
+        for path in ['/', '/shop', '/farms', '/story', '/partner', '/help', '/pack']:
             self.assertEqual(self.client.get(path).status_code, 200, path)
 
 

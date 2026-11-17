@@ -843,6 +843,12 @@ def store_story():
     return render_template('store/story.html', **_store_ctx(page='story'))
 
 
+@app.route('/partner')
+def store_partner():
+    """合作方式：寫給農友看的頁面"""
+    return render_template('store/partner.html', **_store_ctx(page='partner'))
+
+
 @app.route('/help')
 def store_help():
     return render_template('store/help.html', **_store_ctx(page='help'))

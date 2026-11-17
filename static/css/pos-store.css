@@ -5,23 +5,24 @@
 
 /* ---- 1. 把舊的「奶油紙 × 赭橙」色票換成前台的葉綠色票 ---- */
 :root {
-  --paper: #f6f7f1;
-  --paper-soft: #edf2e3;
+  /* 與前台 store.css 設計系統 v2 同一組色票 */
+  --paper: #faf9f5;
+  --paper-soft: #f2f3ec;
   --card: #ffffff;
-  --ink: #1c2a20;
-  --ink-soft: #4a584e;
-  --moss: #386326;
-  --forest: #386326;
-  --forest-deep: #264a17;
-  --ochre: #386326;          /* 舊的橘色重點色一律改成葉綠，全站只有一個主色 */
-  --ochre-deep: #264a17;
+  --ink: #1f241e;
+  --ink-soft: #4b5248;
+  --moss: #2f5a37;
+  --forest: #2f5a37;
+  --forest-deep: #234428;
+  --ochre: #2f5a37;          /* 舊的橘色重點色一律改成主色，全站只有一個主色 */
+  --ochre-deep: #234428;
   --tomato: #9b2a3f;
-  --rule: #dde4d3;
-  --rule-strong: #c4cfb8;
+  --rule: #e6e4dc;
+  --rule-strong: #cfcdc3;
   --shadow: 0 1px 2px rgba(28,42,32,.06), 0 6px 20px -10px rgba(28,42,32,.18);
-  --font-serif: 'Noto Serif TC', 'Songti TC', serif;
+  --font-serif: 'Noto Sans TC', -apple-system, 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
   --font-sans: 'Noto Sans TC', -apple-system, 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
-  --sprout: #e2edc9;
+  --sprout: #e8efe4;
   --radius: 14px;
 }
 html, body { font-size: 16px; line-height: 1.7; }
